@@ -1,0 +1,320 @@
+html{
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+.btn {
+    padding: 6px 12px;
+  font-weight: normal;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -webkit-font-feature-settings: "kern" 1;
+  -moz-font-feature-settings: "kern" 1;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none !important;
+  text-shadow: none;
+  box-shadow: none;
+  line-height: 18px;
+  padding-left: 17px;
+  padding-right: 17px;
+  position: relative;
+  transition: color 0.1s linear 0s, background-color 0.1s linear 0s, opacity 0.2s linear 0s !important;
+}
+
+.btn.active, .btn:active {
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.15);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.15);
+}
+.logo-figure.login-screen{
+    height: 117px;
+    width: 100px;
+    background-position: center;
+    background-size: auto;
+    margin-bottom: 20px;
+}
+.btn {
+    padding: 7px 14px;
+    line-height: 16px;
+}
+
+.btn.btn-sm {
+    padding: 5px 10px;
+}
+.btn.btn-xs {
+    font-size: 11px;
+    padding: 2px 5px;
+}
+.input-group .form-control.minor {
+    width: 25%;
+    border-right-width: 0;
+}
+.input-group .form-control {
+    width: 75%;
+    
+}
+.input-group .form-control:not(:first-child):not(:last-child){
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.input-group.full-width .form-control{
+    width:100%; 
+}
+
+.page-header.no-border {
+    border-bottom-width: 0;
+}
+.control-label.control-label-value {
+    text-align: left;
+    font-weight: normal;
+}
+.lone-label {
+    margin: 0px 6px 10px;
+    font-weight: 600;
+    color: #6f6f6f;
+}
+.form-horizontal .lone-form-group {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-bottom: 0px !important;
+}
+.topPadding {
+    padding-top: 6px;
+}
+.nav-tabs.in-panel {
+    border-radius: 0;
+    background-color: #f1f1f1;
+    border-color: #cfd9db;
+    border-top: 1px solid #cfd9db;
+    padding: 0 10px;
+}
+.nav-tabs.in-panel>li.active>a {
+    border-top: 0px;
+}
+.nav-tabs.in-panel>li {
+    margin-bottom: -2px;
+}
+.tab-content.in-panel .tab-pane{
+    padding-top: 15px;
+}
+.panel-footer .form-group{
+    margin-top: 15px;
+}
+
+.bg-solid{
+    background-color: #f4f4f4;
+    margin: 0 15px 15px;
+    padding: 15px 0 1px;
+}
+.note-options{
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: all 150ms ease-in-out;
+    -moz-transition: all 150ms ease-in-out;
+    -ms-transition: all 150ms ease-in-out;
+    -o-transition: all 150ms ease-in-out;
+    transition: all 150ms ease-in-out;
+}
+
+.single-note-container .single-note-wrapper{
+    padding-top: 10px;
+}
+.single-note-container:hover .single-note-wrapper{
+    background-color: #f8f8f8;
+}
+
+.single-note-container:hover .note-options{
+    opacity: 1;
+    visibility: visible;
+}
+.thin-table .table>tbody>tr>td, .thin-table .table>tbody>tr>th{
+    padding: 6px 10px;
+}
+
+.thin-table .table>tbody>tr>th, .thin-table .table>tfoot>tr>th, .thin-table .table>thead>tr>th{
+    padding: 9px 10px;
+}
+.thin-title{
+    margin-top: 0;
+    font-weight: 300;
+}
+p.info-block{
+    font-size: 12px;
+}
+.form-horizontal .control-label.text-left{
+    text-align: left;
+}
+.submit-features {
+    list-style: none;
+    padding-left: 0;
+    margin: 0 auto;
+    margin-left: 10px;
+}
+.submit-features li {
+    display: inline-block;
+    width: 33%;
+}
+
+.todo-list li {
+    border: 0px;
+    margin: 0px;
+    border-radius: 0px;
+    border-bottom: 1px dashed #e0e0e0;
+}
+.panel-heading small, .panel-heading span, .panel-heading.un-bold {
+font-weight: 400;
+}
+.cr-styled {
+display: inline-block;
+margin: 0px 2px;
+}
+/*****************************
+Styled Radio/Checkbox
+*****************************/
+
+.cr-styled{
+    display:inline-block;
+    margin:0px 2px;}
+
+.cr-styled i{
+    display:inline-block;
+    height:20px;
+    width:20px;
+    cursor:pointer;
+    vertical-align:middle;
+    border:2px solid #CCC;
+    border-radius:3px;
+    text-align:center;
+    padding-top:1px;
+    font-family: 'FontAwesome';}
+
+.cr-styled input{
+    visibility:hidden;
+    display:none;}
+
+
+
+/* Checkbox */
+.cr-styled input[type=checkbox]:checked + i:before{
+    content: "\f00c";}
+
+
+
+/*** cr-styled Theaming/Colorss ***/
+
+.cr-styled input:checked + i{
+    border-color:#096c57;
+    background-color: #096c57;
+    color:#fff;}
+
+.todo-panel .panel-body{
+    height: 290px;
+}
+
+.has-error .help-block{
+    font-size: 12px;
+    margin: 0;
+}
+
+.cat{
+    display: none;
+}
+
+.cat.visible{
+    display: block;
+}
+
+.unit-form .help-block{
+    font-size: 12px;
+    margin: 0;
+    color: #ed5466;
+}
+
+.btn.full-width-btn {
+    width: 100%;
+    height: 100px;
+    line-height: 29px;
+    font-weight: bold;
+}
+
+.text-muted b{
+    font-size: 12px;
+}
+
+#reports ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.reports-container{
+    border-top: 1px solid #cfd9db;
+}
+
+.report-entry{
+    padding: 5px 10px;
+    border-bottom: 1px solid #cfd9db;
+}
+
+span.reporty-entity{
+    display: block;
+    padding: 2px 0px;
+}
+
+.entry-head{
+    background: #f9f9f9;
+}
+
+.entry-head .report-entry, .entry-head .report-entry:hover{
+    padding: 8px 10px;
+    border-bottom-width: 2px;
+    font-weight: bold;
+    color: #5e5e5e;
+}
+.report-entry:hover{
+    background-color: #f8f8f8;
+}
+
+label.table-label{
+    margin-bottom: 0;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.form-horizontal .custom-checkbox-table{
+    padding-top: 5px;
+}
+
+.no-padding{
+    padding: 0 !important;
+}
+
+.fix-height .panel .panel-body{
+    min-height: 110px;
+}
+
+.page-header-form{
+    padding: 2px 0px;
+}
+
+.page-header-form input{
+    width: 90%;
+    float: right;
+}
+
+#flot-tooltip {
+    font-size: 12px;
+    position: absolute;
+    display: none;
+    border: 2px solid;
+    padding: 2px;
+    background-color: #FFF;
+    opacity: 0.8;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    border-radius: 4px;
+}

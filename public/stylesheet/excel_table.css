@@ -1,0 +1,10 @@
+tr>.th {
+    color: #000;
+    font-weight: normal;
+    background-color: #0095be;
+    padding: 10px;
+    height: 40px;
+}
+tr>td {
+    border: 1px solid #000;
+}
