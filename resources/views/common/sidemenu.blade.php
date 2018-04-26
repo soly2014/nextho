@@ -219,6 +219,9 @@
             </a>
         </li>
         @endif 
+
+
+        
         @if(Auth::user()->userRole->view_forecast)
         <li class="{{ ((Request::is('forecast/*') || Request::is('forecast')) ? 'active' : '') }}">
             <a href="{{ route('forecast-view') }}">

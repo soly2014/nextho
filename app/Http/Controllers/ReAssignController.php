@@ -11,6 +11,11 @@ use App\Models\Customer;
 
 class ReAssignController extends Controller {
     
+
+    /**
+     * [getFilter description]
+     * @return [type] [description]
+     */
     public function getFilter(){
             
         PageTitle::add('Re Assign Leads Filter');
@@ -27,6 +32,8 @@ class ReAssignController extends Controller {
             ])
         ));
     }
+
+
     /**
      * [postFilter description]
      * @return [type] [description]
@@ -302,11 +309,7 @@ class ReAssignController extends Controller {
     public function searchLeads(Request $request)
     {
 
-  // "is_customer" => "on"
-  // "no_action" => "on"
-  // "expired" => "on"
-  // "leads_ids" => "[37,64,65,70,73,74,77,79,80,81,82,83,84,85,86,87,88,89,92,93,97,99,102,114,115,116,118,120,121,123,124,127,129,130,134,157,160,161,173,174,177,178,180,182,215,2 ▶"
-  // "assign_to" => "6"
+// dd(json_decode($request->leads_ids));
 
        $leads = Client::whereIn('id',json_decode($request->leads_ids));
 
@@ -355,8 +358,7 @@ class ReAssignController extends Controller {
        }
 
 
-        session()->put('leads', json_decode($request->leads_ids));
-
+        session()->put('leads', $leads->pluck('id')->toArray());
 
         PageTitle::add('Re Assign Leads Filter');
 
@@ -371,7 +373,7 @@ class ReAssignController extends Controller {
                     'crumb_link' => ''
                 ])
             ]),
-            'leads'     => $request->leads_ids,
+            'leads'     => json_decode($request->leads_ids),
             'assign_to' => $request->assign_to,
             'type' => 'leads'
         ));

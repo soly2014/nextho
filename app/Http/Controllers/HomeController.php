@@ -163,8 +163,7 @@ if(auth()->user()->role_id != 1){
 
 		
 			//New Leads
-			$new_leads = Client::where('newly_assigned', true)->where('marked_deleted', false)->where('is_customer', false)->where('assigned_to', auth()->user()->id)->count();
-
+			$new_leads = Client::where('newly_assigned', true)->where('marked_deleted', false)->where('is_customer', false)->count();
             
         }
 

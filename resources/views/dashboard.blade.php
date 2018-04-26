@@ -115,27 +115,27 @@
                     <div class="panel-title ellipsis" >Production Chart</div>
                 </div>
                 <div class="panel-body">
-                      <canvas id="myChart"  style="width: 100%; height: 370px"></canvas>
+                      <canvas id="myChart" width="1200px;" style="width: 100%; height: 370px"></canvas>
                 </div>
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-12">
             <div class="panel panel-default todo-panel">
                 <div class="panel-heading un-bold">
                     <h4>Meetings <!--<small class="text-gray ng-binding">5 of 5 Remaining</small>--></h4>
                 </div>
-                   <canvas id="Meeting"  style="width: 100%; height:70px"></canvas>
+                   <canvas id="Meeting" width="1200px;" style="width: 100%; height:370px"></canvas>
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-12">
             <div class="panel panel-default todo-panel">
                 <div class="panel-heading un-bold">
                     <h4>Calls <!--<small class="text-gray ng-binding">5 of 5 Remaining</small>--></h4>
                 </div>
-                   <canvas id="Call"  style="width: 100%; height:70px"></canvas>
+                   <canvas id="Call" width="1200px;" style="width: 100%; height:370px"></canvas>
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-12">
             <div class="panel panel-default todo-panel">
                 <div class="panel-heading un-bold">
                     <h4>Personal Activities 
@@ -148,7 +148,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-12">
             <div class="panel panel-default todo-panel">
                 <div class="panel-heading un-bold">
                     <h4>Other Activities 
@@ -217,7 +217,10 @@
 
         // Configuration options go here
         options: {
-            responsible: false
+            responsible: false,
+            responsive: false,
+            maintainAspectRatio: false
+
         }
     });
 
@@ -241,7 +244,9 @@
 
         // Configuration options go here
         options: {
-            responsible: false
+            responsible: false,
+            responsive: false,
+            maintainAspectRatio: false
         }
     });
 
@@ -264,7 +269,9 @@
 
         // Configuration options go here
         options: {
-            responsible: false
+            responsible: false,
+            responsive: false,
+            maintainAspectRatio: false
         }
     });
 

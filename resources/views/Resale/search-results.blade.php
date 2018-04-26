@@ -8,7 +8,7 @@
 
 @section('content')
 
-@include('Resale.partials.search')
+@include('resale.partials.search')
 <div class="col-md-12">
     <div class="panel panel-default">
         <!-- panel heading/header -->

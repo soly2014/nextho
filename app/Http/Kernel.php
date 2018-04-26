@@ -57,5 +57,22 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'NewAuth' => \App\Http\Middleware\NewAuth::class,//SalesView
+        'sales.view' => \App\Http\Middleware\SalesView::class,//LeadsView
+        'leads.view' => \App\Http\Middleware\LeadsView::class,//LeadsReassign
+        'leads.reassign' => \App\Http\Middleware\LeadsReassign::class,//CustomersView
+        'customers.view' => \App\Http\Middleware\CustomersView::class,//SalesViewPending
+        'sales.view.pending' => \App\Http\Middleware\SalesViewPending::class,//SalesApprove
+        'sales.approve' => \App\Http\Middleware\SalesApprove::class,//ForcastView
+        'forecast.view' => \App\Http\Middleware\ForcastView::class,//UserManage
+        'users.manage' => \App\Http\Middleware\UserManage::class,//UserView
+        'users.view' => \App\Http\Middleware\UserView::class,//UserAdd
+        'users.add' => \App\Http\Middleware\UserAdd::class,//UserDelete
+        'users.delete' => \App\Http\Middleware\UserDelete::class,//UserDeactivate
+        'users.deactivate' => \App\Http\Middleware\UserDeactivate::class,//RolesManage
+        'roles.manage' => \App\Http\Middleware\RolesManage::class,//RolesAdd
+        'roles.add' => \App\Http\Middleware\RolesAdd::class,//RoleDiactivate
+        'roles.deactivate' => \App\Http\Middleware\RoleDiactivate::class,//ParametersView
+        'parameters.view' => \App\Http\Middleware\ParametersView::class,//
     ];
 }

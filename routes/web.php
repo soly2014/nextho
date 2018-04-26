@@ -12,31 +12,22 @@
 */
 
 
-// Event::listen('illuminate.query', function($sql, $bindings){
+Event::listen('illuminate.query', function($sql, $bindings){
 
-//     /*var_dump($sql);
-//     var_dump($bindings);*/
+    /*var_dump($sql);
+    var_dump($bindings);*/
 
-// });
+});
 
-/*
- * UnAuthenticated Group
- */
-//Route::group(array('before' => 'guest'), function() {
-    
+
     /*
-     * CSRF Protection group
+     * Sign In (GET)
      */
-   // Route::group(array('before' => 'csrf'), function() {
-        /*
-         * Sign In (GET)
-         */
-        Route::post('login', array(
-            'as' => 'account-sign-in-post',
-            'uses' => 'AccountController@postSignIn'
-        ));
-        
-  //  });
+    Route::post('login', array(
+        'as' => 'account-sign-in-post',
+        'uses' => 'AccountController@postSignIn'
+    ));
+    
     
     /*
      * Sign In (GET)
@@ -46,17 +37,13 @@
         'uses' => 'AccountController@getSignIn'
     ));
 
-//});
+
 
 /*
  * Authenticated Group
  */
-//Route::group(array('before' => 'auth'), function() {
+Route::group(array('middleware' => 'NewAuth'), function() {
     
-    /*
-     * CSRF Protection group
-     */
-  //  Route::group(array('before' => 'csrf'), function() {
         /*
          * Create lead (POST)
          */
@@ -119,7 +106,7 @@
             'as' => 'campaign-lead-link-post',
             'uses' => 'CampaignClientController@postCampaignClient'
         ));
-     //   Route::group(array('before' => 'leads.reassign'), function() {
+        Route::group(array('middleware' => 'leads.reassign'), function() {
             Route::post('/leads/re-assign/filter', array(
                 'as'    => 'leads-assign-filter-post',
                 'uses'  => 'ReAssignController@postFilter'
@@ -132,7 +119,7 @@
                 'as'    => 'search-reassign-selection',
                 'uses'  => 'ReAssignController@searchLeads'
             ));
-    //    });
+        });
         Route::post('/leads/{id}/validate/convert', array(
             'as' => 'leads-pre-convert-post',
             'uses' => 'ClientController@postPreConvert'
@@ -162,8 +149,9 @@
             'as' => 'emails-modify-single-post',
             'uses' => 'EmailController@postModify'
         ));
-      //  Route::group(array('before' => 'projects.view'), function() {
-     //       Route::group(array('before' => 'projects.add'), function() {
+        
+       Route::group(array('middleware' => 'projects.view'), function() {
+            Route::group(array('middleware' => 'projects.add'), function() {
                 Route::post('/projects/create', array(
                     'as' => 'projects-create-post',
                     'uses' => 'ProjectController@postCreate'
@@ -172,8 +160,8 @@
                     'as' => 'unit-create-post',
                     'uses' => 'ProjectController@postCreateUnit'
                 ));
-      //      });
-     //       Route::group(array('before' => 'projects.modify'), function() {
+            });
+           Route::group(array('middleware' => 'projects.modify'), function() {
                 Route::PUT('/projects/{id}/modify', array(
                     'as' => 'projects-modify-single-post',
                     'uses' => 'ProjectController@postModify'
@@ -182,37 +170,38 @@
                     'as' => 'unit-modify-post',
                     'uses' => 'ProjectController@postModifyUnit'
                 ));
-      //      });
+           });
                         
             Route::post('/projects/search', array(
                 'as' => 'projects-search-post',
                 'uses' => 'ProjectController@postSearch'
             ));
-    //    });
-    //    Route::group(array('before' => 'units.view'), function() {
-          //  Route::group(array('before' => 'units.add'), function() {
+       });
+    
+       Route::group(array('middleware' => 'units.view'), function() {
+           Route::group(array('middleware' => 'units.add'), function() {
                 Route::post('/units/create', array(
                     'as' => 'units-create-post',
                     'uses' => 'UnitController@postCreate'
                 ));
-         //   });
-          //  Route::group(array('before' => 'units.modify'), function() {
+           });
+           Route::group(array('middleware' => 'units.modify'), function() {
                 Route::PUT('/units/{id}/modify', array(
                     'as'    => 'units-modify-single-post',
                     'uses'  => 'UnitController@postModify'
                 ));
-         //   });
-     //   });
-    //    
-     //   Route::group(array('before' => 'sales.view'), function() {
+           });
+       });
+       
+        Route::group(array('middleware' => 'sales.view'), function() {
 			Route::PUT('/sale/{id}/modify', array(
 				'as'    => 'sales-modify-single-post',
 				'uses'  => 'ClientController@postSaleModify'
 			));
 
-	//	});
+		});
         
-       // Route::group(array('before' => 'reports.view'), function() {
+       Route::group(array('middleware' => 'reports.view'), function() {
             
             Route::post('/reports/generate/client-acquisition', array(
                 'as' => 'report-client-acquisition',
@@ -287,9 +276,9 @@
 				'as' => 'report-clients-attr-post',
 				'uses' => 'ReportController@postClientAttr'
 			));
-     //   });
+       });
         
-     //   Route::group(array('before' => 'users.manage'), function() {
+       Route::group(array('middleware' => 'users.manage'), function() {
             Route::post('/users/create', array(
                 'as' => 'users-create-post',
                 'uses' => 'UserController@postCreate'
@@ -306,15 +295,15 @@
                 'as' => 'users-password-change-post',
                 'uses' => 'UserController@postPasswordChange'
             ));
-    //    });
-    //    Route::group(array('before' => 'roles.manage'), function() {
+       });
+       Route::group(array('middleware' => 'roles.manage'), function() {
             Route::post('/roles/create', array(
                 'as' => 'roles-create-post',
                 'uses' => 'RoleController@postCreate'
             ));
-    //    });
+       });
         
-     //   Route::group(array('before' => 'forecast.view'), function() {
+       Route::group(array('middleware' => 'forecast.view'), function() {
             Route::post('/forecast/create', array(
                 'as' => 'forecast-create-post',
                 'uses' => 'ForecastController@postCreate'
@@ -323,14 +312,14 @@
                 'as' => 'forecast-modify-post',
                 'uses' => 'ForecastController@postModify'
             ));
-    //    });
+       });
         
         Route::post('/email_template/send', array(
             'as'    => 'send-email-post',
             'uses'  => 'EmailController@postSendEmail'
         ));
         
-     //   Route::group(array('before' => 'parameters.view'), function() {
+       Route::group(array('middleware' => 'parameters.view'), function() {
             Route::post('/parameters/client-source/create', array(
                 'as' => 'parameters-client-source-create-post',
                 'uses' => 'ParametersController@postClientSourceCreate'
@@ -420,9 +409,9 @@
                 'as' => 'parameters-activity-status-modify-post',
                 'uses' => 'ParametersController@postActivityStatusModify'
             ));
-    //    });
+       });
                 
-  //  });
+   
 
     
     Route::get('account/sign-out', array(
@@ -434,7 +423,8 @@
     'as'    => 'home',
     'uses'  => 'HomeController@getDashboard'
     ));
-   // Route::group(array('before' => 'leads.view'), function() {
+   
+    Route::group(array('middleware' => 'leads.view'), function() {
         Route::get('/leads/view', array(
             'as' => 'leads-view',
             'uses' => 'ClientController@getAll'
@@ -453,7 +443,7 @@
             'uses'  => 'ClientController@getExist'
         ));
         
-     //   Route::group(array('before' => 'leads.reassign'), function() {
+        Route::group(array('middleware' => 'leads.reassign'), function() {
             Route::get('/leads/re-assign/filter', array(
                 'as'    => 'leads-assign-filter',
                 'uses'  => 'ReAssignController@getFilter'
@@ -462,7 +452,7 @@
                 'as'    => 'leads-assign-selection',
                 'uses'  => 'ReAssignController@getLeads'
             ));
-     //   });
+        });
         
         
         Route::get('/leads/{id}', array(
@@ -471,7 +461,7 @@
         ));
         
         
-    //});
+    });
 
     Route::get('/leads/{id}/send-email', array(
         'as'    => 'leads-send-email',
@@ -503,7 +493,7 @@
         'uses'  => 'ClientController@postRestore'
     ));
         
-  //  Route::group(array('before' => 'customers.view'), function() {
+   Route::group(array('middleware' => 'customers.view'), function() {
         Route::get('/customers', array(
             'as' => 'customers-view',
             'uses' => 'ClientController@getAllCustomers'
@@ -518,16 +508,16 @@
             'as' => 'customers-modify-single',
             'uses' => 'ClientController@getModifyCustomer'
         ));
-  //  });
+   });
     
-  //  Route::group(array('before' => 'sales.view'), function() {
-  //      Route::group(array('before' => 'sales.view.pending'), function() {
+   Route::group(array('middleware' => 'sales.view'), function() {
+       Route::group(array('middleware' => 'sales.view.pending'), function() {
             Route::get('/sale/confirm', array(
                 'as'    => 'leads-confirm',
                 'uses'  => 'ClientController@getConfirmList'
             ));
-   //     });
-   //     Route::group(array('before' => 'sales.approve'), function() {
+       });
+       Route::group(array('middleware' => 'sales.approve'), function() {
             Route::get('/sale/confirm/{id}', array(
                 'as'    => 'leads-convert-single',
                 'uses'  => 'ClientController@postConfirmSingle'
@@ -540,7 +530,7 @@
                 'as'    => 'leads-convert-comment',
                 'uses'  => 'ClientController@getRejectComment'
             ));
-      //  });
+       });
         Route::get('/sale/view', array(
             'as'    => 'sales-view',
             'uses'  => 'ClientController@getSalesList'
@@ -549,7 +539,7 @@
             'as'    => 'sales-modify-single',
             'uses'  => 'ClientController@getSaleModify'
         ));
- //   });
+   });
     Route::get('/note/{id}/delete', array(
         'as' => 'note-delete',
         'uses' => 'NoteController@getDelete'
@@ -601,12 +591,12 @@
 
     
 
-  //  Route::group(array('before' => 'projects.view'), function() {
+   Route::group(array('middleware' => 'projects.view'), function() {
         Route::get('/projects/view', array(
             'as' => 'projects-view',
             'uses' => 'ProjectController@getAll'
         ));
-    //    Route::group(array('before' => 'projects.add'), function() {
+       Route::group(array('middleware' => 'projects.add'), function() {
             Route::get('/projects/create', array(
                 'as' => 'projects-create',
                 'uses' => 'ProjectController@getCreate'
@@ -615,8 +605,8 @@
                 'as' => 'unit-create',
                 'uses' => 'ProjectController@getCreateUnit'
             ));
-   //     });
-     //   Route::group(array('before' => 'projects.modify'), function() {
+       });
+       Route::group(array('middleware' => 'projects.modify'), function() {
             Route::get('/projects/{id}/unit/{unit_id}/modify', array(
                 'as' => 'unit-modify',
                 'uses' => 'ProjectController@getModifyUnit'
@@ -625,9 +615,9 @@
                 'as' => 'projects-modify-single',
                 'uses' => 'ProjectController@getModify'
             ));
-   //     });
+       });
         
-    //    Route::group(array('before' => 'projects.delete'), function() {
+       Route::group(array('middleware' => 'projects.delete'), function() {
             Route::get('/projects/{id}/delete', array(
                 'as' => 'projects-delete',
                 'uses' => 'ProjectController@postDelete'
@@ -636,9 +626,9 @@
                 'as' => 'projects-restore',
                 'uses' => 'ProjectController@postRestore'
             ));
-  //      });
+       });
 
-  //      Route::group(array('before' => 'projects.unit.delete'), function() {
+       Route::group(array('middleware' => 'projects.unit.delete'), function() {
             Route::get('/projects/unit/{id}/delete', array(
                 'as' => 'project-unit-delete',
                 'uses' => 'ProjectController@postDeleteUnit'
@@ -647,30 +637,30 @@
                 'as' => 'project-unit-restore',
                 'uses' => 'ProjectController@postRestoreUnit'
             ));
-   //     });
+       });
         Route::get('/projects/{id}', array(
             'as' => 'projects-view-single',
             'uses' => 'ProjectController@getSingle'
         ));
-   // });
-  //  Route::group(array('before' => 'units.view'), function() {
+   });
+   Route::group(array('middleware' => 'units.view'), function() {
         Route::get('/units/view', array(
             'as'    => 'units-view',
             'uses'  => 'UnitController@getAll'
         ));
-     //   Route::group(array('before' => 'units.add'), function() {
+       Route::group(array('middleware' => 'units.add'), function() {
             Route::get('/units/create', array(
                 'as'    => 'units-create',
                 'uses'  => 'UnitController@getCreate'
             ));
-    //    });
-    //    Route::group(array('before' => 'units.modify'), function() {
+       });
+       Route::group(array('middleware' => 'units.modify'), function() {
             Route::get('/units/{id}/modify', array(
                 'as'    => 'units-modify-single',
                 'uses'  => 'UnitController@getModify'
             ));
-     //   });
-    //    Route::group(array('before' => 'units.delete'), function() {
+       });
+       Route::group(array('middleware' => 'units.delete'), function() {
             Route::get('/units/{id}/delete', array(
                 'as' => 'units-delete',
                 'uses' => 'UnitController@postDelete'
@@ -679,37 +669,37 @@
                 'as' => 'units-restore',
                 'uses' => 'UnitController@postRestore'
             ));
-    //    });
+       });
 
         Route::get('/units/{id}', array(
             'as'    => 'units-view-single',
             'uses'  => 'UnitController@getSingle'
         ));
-  //  });
+   });
     
 
     
-  //  Route::group(array('before' => 'campaigns.view'), function() {
+   Route::group(array('middleware' => 'campaigns.view'), function() {
         Route::get('/campaigns/view', array(
             'as'    => 'campaigns-view',
             'uses'  => 'CampaignController@getAll'
         ));
 
-      //  Route::group(array('before' => 'campaigns.add'), function() {
+       Route::group(array('middleware' => 'campaigns.add'), function() {
             Route::get('/campaigns/create', array(
                 'as'    => 'campaigns-create',
                 'uses'  => 'CampaignController@getCreate'
             ));
-     //   });
+       });
 
-     //   Route::group(array('before' => 'campaigns.modify'), function() {
+       Route::group(array('middleware' => 'campaigns.modify'), function() {
             Route::get('/campaigns/{id}/modify', array(
                 'as' => 'campaigns-modify-single',
                 'uses' => 'CampaignController@getModify'
             ));
-   //     });
+       });
 
-   //     Route::group(array('before' => 'campaigns.delete'), function() {
+       Route::group(array('middleware' => 'campaigns.delete'), function() {
             Route::get('/campaigns/{id}/delete', array(
                 'as' => 'campaigns-delete',
                 'uses' => 'CampaignController@postDelete'
@@ -718,33 +708,33 @@
                 'as' => 'campaigns-restore',
                 'uses' => 'CampaignController@postRestore'
             ));
-     //   });
+       });
 
         Route::get('/campaigns/{id}', array(
             'as' => 'campaigns-view-single',
             'uses' => 'CampaignController@getSingle'
         ));
- //   });
+   });
     
-  //  Route::group(array('before' => 'email_templates.view'), function() {
+   Route::group(array('middleware' => 'email_templates.view'), function() {
         Route::get('/emails/view', array(
             'as' => 'emails-view',
             'uses' => 'EmailController@getAll'
         ));
 
-    //    Route::group(array('before' => 'email_templates.add'), function() {
+       Route::group(array('middleware' => 'email_templates.add'), function() {
             Route::get('/emails/create', array(
                 'as' => 'emails-create',
                 'uses' => 'EmailController@getCreate'
             ));
-      //  });
-      //  Route::group(array('before' => 'email_templates.modify'), function() {
+       });
+       Route::group(array('middleware' => 'email_templates.modify'), function() {
             Route::get('/emails/{id}/modify', array(
                 'as' => 'emails-modify-single',
                 'uses' => 'EmailController@getModify'
             ));
-     //   });
-    //    Route::group(array('before' => 'email_templates.delete'), function() {
+       });
+       Route::group(array('middleware' => 'email_templates.delete'), function() {
             Route::get('/emails/{id}/delete', array(
                 'as' => 'emails-delete',
                 'uses' => 'EmailController@postDelete'
@@ -753,15 +743,15 @@
                 'as' => 'emails-restore',
                 'uses' => 'EmailController@postRestore'
             ));
-   //     });
+       });
 
         Route::get('/emails/{id}', array(
             'as' => 'emails-view-single',
             'uses' => 'EmailController@getSingle'
         ));
- //   });
+   });
     
-  //  Route::group(array('before' => 'reports.view'), function() {
+   Route::group(array('middleware' => 'reports.view'), function() {
         Route::get('/reports/view', array(
             'as' => 'reports-view',
             'uses' => 'ReportController@getAll'
@@ -827,9 +817,9 @@
 			'uses' => 'ReportController@getClientAttr'
         ));
         
-  //  });
+   });
 
-  //  Route::group(array('before' => 'forecast.view'), function() {
+   Route::group(array('middleware' => 'forecast.view'), function() {
         Route::get('/forecast/view', array(
             'as' => 'forecast-view',
             'uses' => 'ForecastController@getAll'
@@ -849,9 +839,9 @@
             'as' => 'forecast-modify',
             'uses' => 'ForecastController@getModify'
         ));
-   // });
+   });
     
-  //  Route::group(array('before' => 'users.manage'), function() {
+   Route::group(array('middleware' => 'users.manage'), function() {
         Route::get('/users', array(
             'as' => 'users-view',
             'uses' => 'UserController@getAll'
@@ -860,7 +850,7 @@
             'as' => 'users-create',
             'uses' => 'UserController@getCreate'
         ));
-  //      Route::group(array('before' => 'users.view'), function() {
+       Route::group(array('middleware' => 'users.view'), function() {
             Route::get('/users/{id}', array(
                 'as' => 'users-view-single',
                 'uses' => 'UserController@getUser'
@@ -885,15 +875,15 @@
                 'as' => 'users-reactivate',
                 'uses' => 'UserController@postUserReactivate'
             ));
-      //  });
-  //  });
+       });
+   });
     
     Route::get('/email_template/{id}/send', array(
         'as'    => 'send-selected-email-post',
         'uses'  => 'EmailController@postSendSelectedEmail'
     ));
     
-   // Route::group(array('before' => 'roles.manage'), function() {
+   Route::group(array('middleware' => 'roles.manage'), function() {
         Route::get('/roles', array(
             'as' => 'roles-view',
             'uses' => 'RoleController@getAll'
@@ -902,9 +892,9 @@
             'as' => 'roles-create',
             'uses' => 'RoleController@getCreate'
         ));
-  //  });
+   });
     
- //   Route::group(array('before' => 'parameters.view'), function() {
+   Route::group(array('middleware' => 'parameters.view'), function() {
         Route::get('/parameters', array(
             'as' => 'parameters-view',
             'uses' => 'ParametersController@getAll'
@@ -1119,9 +1109,9 @@
             'as' => 'parameters-activity-status-publish',
             'uses' => 'ParametersController@getActivityStatusPublish'
         ));
- //   });
     
-//});
+});
+
 
 
 
@@ -1167,3 +1157,7 @@ Route::post('filter-activity-dashboard','FilterController@filterActivity')->name
 
 Route::get('change-password','UserController@changePassword')->name('change.password');//
 Route::post('change-password','UserController@postChangePassword')->name('post.change.password');//
+
+
+
+});

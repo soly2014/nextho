@@ -11,7 +11,10 @@ use Illuminate\Http\Request;
 class ReportController extends Controller {
 
 
-
+    /**
+     * [getAll description]
+     * @return [type] [description]
+     */
     public function getAll()
     {
         $reports = Report::where('active', true)->get();
@@ -30,6 +33,11 @@ class ReportController extends Controller {
             'reports'   => $reports
         ));
     }
+
+    /**
+     * [getCreate description]
+     * @return [type] [description]
+     */
     public function getCreate()
     {
         PageTitle::add('Create A New Report');

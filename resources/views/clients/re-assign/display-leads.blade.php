@@ -171,7 +171,7 @@ $(document).ready(function() {
     oTable = $('#Leads').DataTable({
         "processing": true,
         "serverSide": true,
-        "ajax": "{{ route('leads.datatables',json_encode($leads)) }}",
+        "ajax": "{{ route('leads.datatables',json_encode(session('leads'))) }}",
         "columns": [
             {data: 'id', name: 'clients.id'},
             {data: 'name', name: 'clients.name'},
