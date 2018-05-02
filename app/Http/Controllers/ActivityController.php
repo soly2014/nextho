@@ -35,7 +35,7 @@ class ActivityController extends Controller {
             $activitable_type   = 'App\Models\\'.$request->activitable_type;
             
             $user               = auth()->user()->id;
-            $activity_owner     = auth()->user()->id;
+            $activity_owner     = \App\Models\Client::find($activitable_id)->assigned_to;
 
             if($request->activity_owner){
                 $activity_owner = $request->activity_owner;

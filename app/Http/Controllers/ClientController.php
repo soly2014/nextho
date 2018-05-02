@@ -105,7 +105,12 @@ class ClientController extends Controller {
 
 			if(!$lead){
 
-				return redirect()->route('leads-create-get')->with('valide', true)->with('mobile', $number);
+				$number_type_mobile = $request->phone != '' ? $number : '';
+				$number_type_international_number = $request->phone == '' ? $number : '';
+
+				session(['number_type_mobile'=>$number_type_mobile,'number_type_international_number'=>$number_type_international_number]);
+
+				return redirect()->route('leads-create-get')->with('valide', true);
 
 			} else if($lead->assigned_to != $user){
 
@@ -1942,11 +1947,11 @@ class ClientController extends Controller {
 			}
 
 
-			if($interested_district != "1") {
+			if($interested_district != "1" && $interested_district != "") {
 				$leads    = $leads->where('interested_district', $interested_district);
 			}
 
-			if($interested_type != "10") {
+			if($interested_type != "10" && $interested_type != "") {
 				$leads = $leads->where('interested_type', $interested_type);
 			}
 
@@ -1972,6 +1977,7 @@ class ClientController extends Controller {
             if ($request->project_id && count($request->project_id) > 0) {
             	$sub_projects = array_unique(ClientProject::whereIn('project_id',$request->project_id)->pluck('client_id')->toArray());
             }
+dd($leads->pluck('id')->toArray(),$sub_developers,$sub_projects,$sub_mails,$sub_phones);
 
             $arr = [];
             foreach ([$leads->pluck('id')->toArray(),$sub_developers,$sub_projects,$sub_mails,$sub_phones] as $key => $value) {

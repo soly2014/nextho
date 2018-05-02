@@ -172,9 +172,9 @@
 					@foreach($converted as $lead)
 					<tr>
 						<td><a href="{{ route('leads-view-single', $lead->id) }}">{{ $lead->name }} {{ $lead->last_name }}</a>
-							@if($lead->newly_assigned)
+							
 							- <span class="label label-info">Converted</span>
-							@endif
+							
 							@if($lead->marked_deleted)
 							- <span class="label label-danger" title="{{ 'Deleted by '.$lead->userDeleted->username.' at '.$lead->deleted_at }}">Deleted</span>
 							@endif

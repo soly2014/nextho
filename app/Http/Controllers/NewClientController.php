@@ -33,5 +33,17 @@ class NewClientController extends Controller
         return response()->json(['success'=>true]);
     }
 
+    /**
+     * [countNewLeads description]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function countNewLeads(Request $request)
+    {
+        $new_count = auth()->user()->clientsAssigned()->where('newly_assigned', true)->where('marked_deleted', false)->where('is_customer', false)->count();
+        $diff = $new_count - $request->num;
+
+        return response()->json(['diff'=>$diff,'new_count'=>$new_count]);
+    }
 
 }

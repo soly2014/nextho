@@ -20,14 +20,14 @@
             <div class="col-sm-3">
                 <div class="note-info">
                     <div class="note-options">
-                        @if(($modify || ($note->created_by == $note->note_owner)) || ($delete || ($note->created_by == $note->note_owner)))
+                        @if($modify || $delete)
                         <b>Actions</b>
                         @endif
                         <br />
-                        @if($modify || ($note->created_by == $note->note_owner))
+                        @if($modify)
                         <a href="#" class="note-edit"><i class="ico-pencil7 mr5"></i>Edit</a>  
                         @endif
-                        @if($delete || ($note->created_by == $note->note_owner))
+                        @if($delete)
                             @if($note->marked_deleted)
                                 @if($restore)
                                 <b> - </b><a href="{{ route('note-restore', array($note->id)) }}" class="text-primary confirm-restore-first"><i class="ico-loop2 mr5"></i>Restore</a>

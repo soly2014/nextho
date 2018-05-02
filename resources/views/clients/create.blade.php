@@ -88,7 +88,7 @@
                         @endif
                             <label class="col-sm-3 control-label" for="mobile">Mobile (1):</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="mobile" id="mobile" value="{{ old('mobile') ? old('mobile') : $mobile }}" readonly>
+                                <input type="text" class="form-control input-sm" name="mobile" id="mobile" value="{{ session('number_type_mobile') ? : '' }}" {{ session('number_type_mobile') ? 'readonly' : '' }}>
                                 @if($errors->has('mobile'))
                                 <div class="help-block">{{ $errors->first('mobile') }}</div>
                                 @endif
@@ -122,7 +122,7 @@
                         @endif
                             <label class="col-sm-3 control-label" for="international_number">International Number:</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="international_number" id="international_number" >
+                                <input type="text" class="form-control input-sm" name="international_number" id="international_number"  value="{{ session('number_type_international_number') ?: '' }}"  {{ session('number_type_international_number') ? 'readonly': '' }}>
                                 @if($errors->has('international_number'))
                                 <div class="help-block">{{ $errors->first('international_number') }}</div>
                                 @endif

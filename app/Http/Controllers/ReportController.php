@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-
-
-
 use Illuminate\Http\Request;
-
+use \App\Models\{Activity,ClientProperty,Forecast,User,Client,Report,ClientSource,ClientStatus,ClientUser,Project,UnitType,Unit,SubContact,ClientDeveloper,ClientProject};
+use Carbon\Carbon;
+use PageTitle;
+use DB;
 
 class ReportController extends Controller {
 
@@ -17,7 +17,8 @@ class ReportController extends Controller {
      */
     public function getAll()
     {
-        $reports = Report::where('active', true)->get();
+
+        // $reports = Report::where('active', true)->get();
         PageTitle::add('View All Available Reports');
         return view('reports.view', array(
             'breadcrumbs' => array([
@@ -29,10 +30,175 @@ class ReportController extends Controller {
                     'crumb_name' => 'View All',
                     'crumb_link' => 'reports-view'
                 ])
-            ]),
-            'reports'   => $reports
+            ])
         ));
     }
+
+    /**
+     * [startGenerate description]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function startGenerate(Request $request)
+    {
+
+
+            $name                   = $request->name;
+            $company                = $request->company;
+            $work_title             = $request->work_title;
+            $phone                  = $request->mobile;
+            $email                  = $request->email;
+            $lead_status            = $request->lead_status;
+            $lead_source            = $request->lead_source;
+            $interested_district    = $request->interested_district;
+            $interested_type        = $request->interested_type;
+            $cat                    = $request->cat;// seller,buyer
+            $from                   = $request->from;
+            $to                     = $request->to;
+
+
+            $view_all = false;
+
+            $curr_user = $request->assign_to;
+            $start_date = "";
+            $end_date   = "";
+
+            $end_raw = $request->end_date;
+            if($end_raw != ""){
+                $end_date = date('Y-m-d', strtotime($request->end_date));
+            }
+
+            $start_raw = $request->start_date;
+            if($start_raw != ""){
+                $start_date = date('Y-m-d', strtotime($request->start_date));
+            }
+
+
+            $leads      = Client::select('*');
+            
+            if($name != "") {
+                $leads    = $leads->where('name', 'LIKE', '%'.$name.'%')->orWhere('last_name', 'LIKE', '%'.$name.'%');
+            }
+
+            if($company != "") {
+                $leads    = $leads->where('company', 'LIKE', '%'.$company.'%');
+            }
+
+            //CAT
+            if($cat != "1") {
+                $leads    = $leads->where('cat', $cat);
+            }
+
+
+            $sub_phones=[];
+            if($phone != "") {
+                $leads    = $leads->where('Phone', $phone)->orWhere('mobile', $phone)->orWhere('mobile_two', $phone)->orWhere('international_number', $phone);//->orWhereHas('sub',function ($query) use($phone)
+                $sub_phones = SubContact::where('phone',$phone)->orWhere('mobile_one',$phone)->orWhere('mobile_two',$phone)->orWhere('international_number',$phone)->pluck('user_id');
+            }
+
+
+            $sub_mails = [];
+            if($email != "") {
+                $leads = $leads->where('email', $email)->orWhere('secondary_email',$email);
+                $sub_mails = SubContact::where('email',$email)->pluck('user_id');
+            }
+
+
+            if($lead_status != "") {
+                $leads = $leads->where('client_status_id', $lead_status);
+            }
+
+            if($from != "") {
+                $leads = $leads->where('badget_from','>=', $from);
+            }
+
+            if($to != "") {
+                $leads = $leads->where('badget_to','<=', $to);
+            }
+
+            if($lead_source != "") {
+                $leads = $leads->where('client_source_id', $lead_source);
+            }
+
+
+            if($interested_district != "1" && $interested_district != "") {
+                $leads    = $leads->where('interested_district', $interested_district);
+            }
+
+            if($interested_type != "10" && $interested_type != "") {
+                $leads = $leads->where('interested_type', $interested_type);
+            }
+
+            if($curr_user != ""){
+                $leads    = $leads->where('assigned_to', $curr_user);
+            }
+
+            if($start_date != ""){
+                $leads    = $leads->where(DB::raw('DATE(created_at)'), '>', $start_date);
+            }
+
+            if($start_date != ""){
+                $leads    = $leads->where(DB::raw('DATE(created_at)'), '<', $end_date);
+            }
+
+            $sub_developers = [];
+            if ($request->developer_id && count($request->developer_id) > 0) {
+                $sub_developers = array_unique(ClientDeveloper::whereIn('developer_id',$request->developer_id)->pluck('client_id')->toArray());
+            }
+
+
+            $sub_projects = [];
+            if ($request->project_id && count($request->project_id) > 0) {
+                $sub_projects = array_unique(ClientProject::whereIn('project_id',$request->project_id)->pluck('client_id')->toArray());
+            }
+
+            $arr = [];
+            foreach ([$leads->pluck('id')->toArray(),$sub_developers,$sub_projects,$sub_mails,$sub_phones] as $key => $value) {
+                        if (count($value) > 0) {
+                            $arr[] = $value;
+                        }
+                     }     
+            $ids=[];
+            if (count($arr) > 1) {
+                  $ids = array_intersect(...$arr);
+            } else {
+                  $ids = $arr[0];
+            }
+
+            
+          return (new \App\Exports\LeadsExport($ids))->download('leads.xlsx');
+        dd($ids);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * [getCreate description]

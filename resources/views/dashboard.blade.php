@@ -12,158 +12,64 @@
 
 @section('content')
 
-<div class="col-sm-12">
-   {{--  <div class="row">
-        <div class="col-sm-6">
-            <div class="table-layout">
-                <div class="col-xs-2 panel bgcolor-success">
-                    <div class="ico-bars fsize24 text-center"></div>
-                </div>
-                <div class="col-xs-10 panel">
-                    <div class="panel-body text-center">
-                        <table class="semibold text-muted mb0 mt5 text-left table-prod" width="100%">
-                            <tr>
-                                <td>{{ number_format($sales_month, 0) }} EGP</td>
-                                <td>-</td>
-                                <td>{{ number_format($forecast_month, 0) }} EGP</td>
-                                <td>=</td>
-                                <td>{{ number_format(($forecast_month - $sales_month), 0) }} EGP</td>
-                                <td><span class="text-primary text-right">Monthly</span></td>
-                            </tr>
-                            <tr>
-                                <td>{{ number_format($sales_quarter, 0) }} EGP</td>
-                                <td>-</td>
-                                <td>{{ number_format($forecast_quarter, 0) }} EGP</td>
-                                <td>=</td>
-                                <td>{{ number_format(($forecast_quarter - $sales_quarter), 0) }} EGP</td>
-                                <td><span class="text-primary text-right">Quarterly</span></td>
-                            </tr>
-                            <tr>
-                                <td>{{ number_format($sales_year, 0) }} EGP</td>
-                                <td>-</td>
-                                <td>{{ number_format($forecast_year, 0) }} EGP</td>
-                                <td>=</td>
-                                <td>{{ number_format(($forecast_year - $sales_year), 0) }} EGP</td>
-                                <td><span class="text-primary text-right">Yearly</span></td>
-                            </tr>
-                        </table>
-                        <p class="semibold text-muted mb0 mt5">Total Sales</p>
+@if(auth()->user()->role_id != '2')
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title ellipsis" >Production Chart</div>
+                    </div>
+                    <div class="panel-body">
+                          <canvas id="myChart" style="width: 100%; height: 370px"></canvas>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="table-layout">
-                <div class="col-xs-2 panel bgcolor-success">
-                    <div class="ico-stats-up fsize24 text-center"></div>
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title ellipsis" >Meetings</div>
+                    </div>
+                       <canvas id="Meeting" style="width: 550px; height:370px"></canvas>
                 </div>
-                <div class="col-xs-10 panel">
-                    <div class="panel-body text-center">
-                        <table class="semibold text-muted mb0 mt5 text-left table-prod" width="100%">
-                            <tr>
-                                <td>{{ $monthly_actions }}</td>
-                                <td>-</td>
-                                <td>{{ $monthly_follow_ups }}</td>
-                                <td>=</td>
-                                <td>{{ $monthly_follow_ups - $monthly_actions }}</td>
-                                <td><span class="text-primary text-right">Monthly</span></td>
-                            </tr>
-                            <tr>
-                                <td>{{ $quarterly_actions }}</td>
-                                <td>-</td>
-                                <td>{{ $monthly_follow_ups*3 }}</td>
-                                <td>=</td>
-                                <td>{{ ($monthly_follow_ups*3) - $quarterly_actions }}</td>
-                                <td><span class="text-primary text-right">Quarterly</span></td>
-                            </tr>
-                            <tr>
-                                <td>{{ $yearly_actions }}</td>
-                                <td>-</td>
-                                <td>{{ $monthly_follow_ups*12 }}</td>
-                                <td>=</td>
-                                <td>{{ ($monthly_follow_ups*12) - $yearly_actions }}</td>
-                                <td><span class="text-primary text-right">Yearly</span></td>
-                            </tr>
-                        </table>
-                        <p class="semibold text-muted mb0 mt5">Follow Ups</p>
+            </div>
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title ellipsis" >Calls</div>
+                    </div>
+                       <canvas id="Call" style="width: 550px; height:370px"></canvas>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="panel panel-default todo-panel">
+                    <div class="panel-heading un-bold">
+                        <h4>Personal Activities 
+                          <span class="fa fa-calendar " style="float: right;margin-left: 10px;"></span>
+                          <input type="text" name='datepicker' class="full-date-picker personl_activity" data-type="personal" style="width: 100px;float: right;"  value="00/00/0000"  ng-required="true" placeholder="MM/DD/YYYY" >
+                        </h4>
+                    </div>
+                    <div class="panel-body no-padding">
+                        @include('common.dash-activities')
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-2">
-            <div class="table-layout fix-height">
-                <div class="col-xs-4 panel bgcolor-teal">
-                    <div class="ico-users2 fsize24 text-center"></div>
-                </div>
-                <div class="col-xs-8 panel">
-                    <div class="panel-body text-center">
-                        <h4 class="semibold nm">{{ $new_leads }}</h4>
-                        <p class="semibold text-muted mb0 mt5">Reassigned Leads With No Action</p>
+            <div class="col-sm-6">
+                <div class="panel panel-default todo-panel">
+                    <div class="panel-heading un-bold">
+                        <h4>Other Activities 
+                          <span class="fa fa-calendar " style="float: right;margin-left: 10px;"></span>
+                          <input type="text" name='datepicker' class="full-date-picker other_activity" data-type="other" style="width: 100px;float: right;"  value="00/00/0000" ng-required="true" placeholder="MM/DD/YYYY" >
+                        </h4>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-
-    
-
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title ellipsis" >Production Chart</div>
-                </div>
-                <div class="panel-body">
-                      <canvas id="myChart" width="1200px;" style="width: 100%; height: 370px"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12">
-            <div class="panel panel-default todo-panel">
-                <div class="panel-heading un-bold">
-                    <h4>Meetings <!--<small class="text-gray ng-binding">5 of 5 Remaining</small>--></h4>
-                </div>
-                   <canvas id="Meeting" width="1200px;" style="width: 100%; height:370px"></canvas>
-            </div>
-        </div>
-        <div class="col-sm-12">
-            <div class="panel panel-default todo-panel">
-                <div class="panel-heading un-bold">
-                    <h4>Calls <!--<small class="text-gray ng-binding">5 of 5 Remaining</small>--></h4>
-                </div>
-                   <canvas id="Call" width="1200px;" style="width: 100%; height:370px"></canvas>
-            </div>
-        </div>
-        <div class="col-sm-12">
-            <div class="panel panel-default todo-panel">
-                <div class="panel-heading un-bold">
-                    <h4>Personal Activities 
-                      <span class="fa fa-calendar " style="float: right;margin-left: 10px;"></span>
-                      <input type="text" name='datepicker' class="full-date-picker personl_activity" data-type="personal" style="width: 100px;float: right;"  value="00/00/0000"  ng-required="true" placeholder="MM/DD/YYYY" >
-                    </h4>
-                </div>
-                <div class="panel-body no-padding">
-                    @include('common.dash-activities')
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12">
-            <div class="panel panel-default todo-panel">
-                <div class="panel-heading un-bold">
-                    <h4>Other Activities 
-                      <span class="fa fa-calendar " style="float: right;margin-left: 10px;"></span>
-                      <input type="text" name='datepicker' class="full-date-picker other_activity" data-type="other" style="width: 100px;float: right;"  value="00/00/0000" ng-required="true" placeholder="MM/DD/YYYY" >
-                    </h4>
-                </div>
-                <div class="panel-body no-padding">
-                    @include('common.dash-otheractivities')
+                    <div class="panel-body no-padding">
+                        @include('common.dash-otheractivities')
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
+@endif
 
 
 @stop
@@ -374,16 +280,22 @@
             }
         });
 
+        @if(auth()->user()->role_id == '3')
+        setInterval(function() {
+            $.ajax({
+                type:'GET',
+                data:{num:{{ $new_leads }} },
+                url:'{{ route('count_new_leads') }}',
+                success:function(data){
+                    console.log(data.diff,data.new_count);
+                },
+                error:function(error){
+                    alert(error);
+                }
+            });
+        },2000);
+        @endif
 
-// $('.delete_image').on('click',function(){
-
-//     var r = confirm("Are You Sure You Wanna Delete This!");
-//     if (r == true) {
-//         var id = $(this).data('id');
-//        window.location.href = siteBaseURL + 'delete-stock-image/' +id;
-//     } 
-
-// });
 
  });
     

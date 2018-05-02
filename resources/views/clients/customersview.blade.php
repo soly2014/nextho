@@ -33,8 +33,8 @@
                               @if(!$props->comment_seen && $props->created_by == auth()->user()->id)
                                             <tr><td>{{ $props->Client->last_name }}</td>
                                                 <td>{{ $props->saleInfo ? $props->saleInfo->Type->label : ''}}</td>
-                                                <td>{{ number_format($props->saleInfo->sold_price, 0) }} EGP</td>
-                                                <td>{{ $props->saleInfo->unit_area }}</td>
+                                                <td>{{ $props->saleInfo ? number_format($props->saleInfo->sold_price, 0) : '' }} EGP</td>
+                                                <td>{{ $props->saleInfo ? $props->saleInfo->unit_area : '' }}</td>
                                                 <td>{{ $props->created_at }}</td>
                                                 <td>{{ $props->comment }}</td>
                                                 <td><a href="javascript:;" data-id="{{ $props->id }}" class="btn btn-info seen">Seen</a></td></tr>

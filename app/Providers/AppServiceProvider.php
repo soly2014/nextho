@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     {
 
 
-            View::composer(['clients.create','clients.search', 'clients.edit','convert.convert','resale.create','resale.edit','resale.partials.search'], function($view)
+            View::composer(['clients.create','clients.search','reports.view', 'clients.edit','convert.convert','resale.create','resale.edit','resale.partials.search'], function($view)
             {
                 $users = null;
                 $not_set = array('' => '-None-');
@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
 
 
 
-            View::composer(['clients.leadsview', 'reports.client_param'], function($view){
+            View::composer(['clients.leadsview', 'reports.client_param','reports.view'], function($view){
                 $users = null;
                 $not_set = array('' => '-None-');
                 $lead_source        = $not_set + \App\Models\ClientSource::Where('published', '=', 1)->orderBy('sort_order', 'ASC')->pluck('label', 'id')->toArray();

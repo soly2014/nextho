@@ -33,7 +33,7 @@ class NoteController extends Controller {
 
                 $note = Note::create(array(
                     'note_text'         => $note_text,
-                    'note_owner'        => $user,
+                    'note_owner'        =>  \App\Models\Client::find($noteable_id)->assigned_to,
                     'marked_deleted'    => false,
                     'created_by'        => $user,
                     'updated_by'        => $user,

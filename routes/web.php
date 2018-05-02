@@ -751,15 +751,22 @@ Route::group(array('middleware' => 'NewAuth'), function() {
         ));
    });
     
-   Route::group(array('middleware' => 'reports.view'), function() {
+
+   //
+   //
+   //  START REPORTS
+   //
+   //
+   // Route::group(array('middleware' => 'reports.view'), function() {
+
         Route::get('/reports/view', array(
             'as' => 'reports-view',
             'uses' => 'ReportController@getAll'
-        ));
+        ));// new-report-generate
 
         Route::get('/reports/create', array(
-            'as' => 'reports-create',
-            'uses' => 'ReportController@getCreate'
+            'as' => 'new-report-generate',
+            'uses' => 'ReportController@startGenerate'
         ));
 
         Route::get('/reports/singleview', array(
@@ -817,7 +824,10 @@ Route::group(array('middleware' => 'NewAuth'), function() {
 			'uses' => 'ReportController@getClientAttr'
         ));
         
-   });
+   // });
+   //
+   //  END REPORTS
+   //
 
    Route::group(array('middleware' => 'forecast.view'), function() {
         Route::get('/forecast/view', array(
@@ -1159,5 +1169,6 @@ Route::get('change-password','UserController@changePassword')->name('change.pass
 Route::post('change-password','UserController@postChangePassword')->name('post.change.password');//
 
 
+Route::get('count-new-leads','NewClientController@]')->name('count_new_leads');
 
 });

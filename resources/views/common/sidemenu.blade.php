@@ -109,8 +109,7 @@
             @endif
         @endif
  --}}        
-        @if(Auth::user()->userRole->view_units)
-            @if(Auth::user()->userRole->add_units)
+
             <li class="{{ ((Request::is('resales/*') || Request::is('resales')) ? 'active' : '') }}" >
                 <a href="javascript:void(0);" data-target="#units" data-toggle="submenu" data-parent=".topmenu">
                     <span class="figure"><i class="ico-office"></i></span>
@@ -132,15 +131,6 @@
 
                 </ul>
             </li>
-            @else
-            <li class="{{ ((Request::is('resales/*') || Request::is('resales')) ? 'active' : '') }}" >
-                <a href="{{ route('resales.index') }}">
-                    <span class="figure"><i class="ico-office"></i></span>
-                    <span class="text">Individual Units</span>
-                </a>
-            </li>
-            @endif
-        @endif
         
         
 {{--         @if(Auth::user()->userRole->view_campaigns)
