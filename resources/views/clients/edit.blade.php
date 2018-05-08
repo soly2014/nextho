@@ -103,8 +103,8 @@
                                     <label class="col-sm-3 control-label text-right" for="project_id">Projects:</label>
                                     <div class="col-sm-9">
                                         <select name="project_id[]" id="e1" class="form-control input-sm minor" multiple>
-                                            @foreach(\App\Models\ParameterProject::all() as $V)
-                                                <option value="{{ $V->id }}" {{ in_array( $V->id, $client->projects->pluck('project_id')->toArray())  ? 'selected' : '' }}>{{ $V->name }}</option>
+                                            @foreach(\App\Models\ParameterProject::where('published',true)->get() as $V)
+                                                <option value="{{ $V->id }}" {{ in_array( $V->id, $client->projects->pluck('id')->toArray())  ? 'selected' : '' }}>{{ $V->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -209,8 +209,8 @@
                                     <div class="col-sm-9">
                                         <select name="developer_id[]" id="e2" class="form-control input-sm minor" multiple>
                                                 <option value="">--None--</option>
-                                            @foreach(\App\Models\Developer::all() as $v)
-                                                <option value="{{ $v->id }}" {{ in_array( $v->id, $client->developers->pluck('developer_id')->toArray())  ? 'selected' : '' }}>{{ $v->name }}</option>
+                                            @foreach(\App\Models\Developer::where('published',true)->get() as $v)
+                                                <option value="{{ $v->id }}" {{ in_array( $v->id, DB::table('clients_developers')->where('client_id',$client->id)->pluck('developer_id')->toArray())  ? 'selected' : '' }}>{{ $v->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>

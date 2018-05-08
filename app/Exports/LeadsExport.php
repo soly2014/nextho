@@ -68,4 +68,4 @@ class LeadsExport implements FromQuery, WithMapping, WithHeadings
             'Emails'
         ];// client name,numbers,international numbers,emails
     }
-}
+}//UPDATE `leads` SET `country`='UAE' WHERE `user_id`=48 ORWHERE `user_id`=41

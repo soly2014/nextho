@@ -21,14 +21,55 @@ class ClientController extends Controller {
 
 		$view_all = false;
 		if(auth()->user()->userRole->view_all_leads){
-			$leads 		= Client::with('userDeleted', 'userAssigned', 'district')->where('is_customer', false)->where('newly_assigned', false)->latest()->paginate(25);
-			$no_leads 	= Client::with('userDeleted', 'userAssigned', 'district')->where('is_customer', false)->where('newly_assigned', true)->latest()->paginate(25);
-			$converted 	= Client::with('userDeleted', 'userAssigned', 'district')->where('is_customer', false)->where('converted', true)->latest()->paginate(25);
+
+			$leads 		= Client::with('userDeleted', 'userAssigned', 'district')->where('is_customer', false)
+			                                                                     ->where('newly_assigned', false)
+			                                                                     ->where('converted', false)
+			                                                                     ->latest()->paginate(25);
+			$no_leads 	= Client::with('userDeleted', 'userAssigned', 'district')->where('is_customer', false)
+			                                                                     ->where('newly_assigned', true)
+			                                                                     ->where('converted', false)
+			                                                                     ->latest()->paginate(25);
+			$converted 	= Client::with('userDeleted', 'userAssigned', 'district')->where('is_customer', false)
+			                                                                     ->where('converted', true)
+			                                                                     ->where('newly_assigned', false)
+			                                                                     ->latest()->paginate(25);
 			$view_all= true;
+		} else if(auth()->user()->role_id == '2') {
+
+			$leads 		= auth()->user()->clientsAssigned()->with('district')->where('marked_deleted', false)
+			                                                                 ->where('is_customer', false)
+			                                                                 ->where('newly_assigned', false)
+			                                                                 ->where('converted', false)
+			                                                                 ->latest()->paginate(25);
+			$no_leads 	= auth()->user()->clientsAssigned()->with('district')->where('marked_deleted', false)
+			                                                                 ->where('is_customer', false)
+			                                                                 ->where('newly_assigned', true)
+			                                                                 ->where('converted', false)
+			                                                                 ->latest()->paginate(25);
+			$converted 	= auth()->user()->clientsAssigned()->with('district')->where('marked_deleted', false)
+			                                                                 ->where('is_customer', false)
+			                                                                 ->where('converted', true)
+			                                                                 ->where('newly_assigned', false)
+			                                                                 ->latest()->paginate(25);
 		} else {
-			$leads 		= auth()->user()->clientsAssigned()->with('district')->where('marked_deleted', false)->where('is_customer', false)->where('newly_assigned', false)->latest()->paginate(25);
-			$no_leads 	= auth()->user()->clientsAssigned()->with('district')->where('marked_deleted', false)->where('is_customer', false)->where('newly_assigned', true)->latest()->paginate(25);
-			$converted 	= auth()->user()->clientsAssigned()->with('district')->where('marked_deleted', false)->where('is_customer', false)->where('converted', true)->latest()->paginate(25);
+
+			$leads 		= auth()->user()->clientsAssigned()->with('district')->where('marked_deleted', false)
+			                                                                 ->where('is_customer', false)
+			                                                                 ->where('newly_assigned', false)
+			                                                                 ->where('converted', false)
+			                                                                 ->latest()->paginate(25);
+			$no_leads 	= Client::with('userDeleted', 'userAssigned', 'district')->where('marked_deleted', false)
+			                                                                     ->where('is_customer', false)
+			                                                                     ->where('newly_assigned', true)
+			                                                                     ->where('converted', false)
+			                                                                     ->latest()->paginate(25);
+			$converted 	= auth()->user()->clientsAssigned()->with('district')->where('marked_deleted', false)
+			                                                                 ->where('is_customer', false)
+			                                                                 ->where('converted', true)
+			                                                                 ->where('newly_assigned', false)
+			                                                                 ->latest()->paginate(25);
+
 		}
 
 		PageTitle::add('View Leads');
@@ -382,21 +423,11 @@ class ClientController extends Controller {
 				]);
 
                 if ($request->developer_id) {
-		            for ($i=0; $i < count($request->developer_id) ; $i++) {
-
-		                $lead->developers()->save(new \App\Models\ClientDeveloper ([
-		                    'developer_id' => $request->developer_id[$i],
-		                ]));
-		            }
+		            $lead->developers()->attach($request->developer_id);
                 }
 
                 if ($request->project_id) {
-		            for ($i=0; $i < count($request->project_id) ; $i++) {
-
-		                $lead->projects()->save(new \App\Models\ClientProject ([
-		                    'project_id' => $request->project_id[$i],
-		                ]));
-		            }
+		            $lead->projects()->attach($request->project_id);
                 }
         });	
 
@@ -762,24 +793,9 @@ class ClientController extends Controller {
 				]);
 
 				// delete old developers & projects
-                $client->developers()->delete();
-                $client->projects()->delete();
+                $client->developers()->sync($request->developer_id);
+                $client->projects()->sync($request->project_id);
                 
-                if ($request->developer_id) {
-		            for ($i=0; $i < count($request->developer_id) ; $i++) {
-		                $client->developers()->save(new \App\Models\ClientDeveloper ([
-		                    'developer_id' => $request->developer_id[$i],
-		                ]));
-		            }
-                }                                         
-
-                if ($request->project_id) {
-		            for ($i=0; $i < count($request->project_id) ; $i++) {
-		                $client->projects()->save(new \App\Models\ClientProject ([
-		                    'project_id' => $request->project_id[$i],
-		                ]));
-		            }
-                }   
         });	
 
 
@@ -1663,7 +1679,11 @@ class ClientController extends Controller {
 			return redirect()->route('leads-confirm');
 		}
 	}
-
+	/**
+	 * [getRejectComment description]
+	 * @param  [type] $id [description]
+	 * @return [type]     [description]
+	 */
 	public function getRejectComment($id){
 		$conversion = ClientProperty::where('id', $id)->where('marked_deleted', 0)->where('pending', true)->first();
 
@@ -1715,7 +1735,7 @@ class ClientController extends Controller {
 				if($conversion->Client->pending_conversion){
 					$conversion->Client->update(array(
 						'pending_conversion'    => false,
-						'last_updated_by'            => $user
+						'last_updated_by'       => $user
 					));
 				}
 
@@ -1869,18 +1889,18 @@ class ClientController extends Controller {
 	public function postSearch(Request $request){
 
 
-		$name                   = $request->name;
-		$company                = $request->company;
-		$work_title             = $request->work_title;
-		$phone                  = $request->mobile;
-		$email                  = $request->email;
-		$lead_status            = $request->lead_status;
-		$lead_source            = $request->lead_source;
-		$interested_district    = $request->interested_district;
-		$interested_type        = $request->interested_type;
-		$cat                    = $request->cat;// seller,buyer
-		$from                   = $request->from;
-		$to                     = $request->to;
+			$name                   = $request->name;
+			$company                = $request->company;
+			$work_title             = $request->work_title;
+			$phone                  = $request->mobile;
+			$email                  = $request->email;
+			$lead_status            = $request->lead_status;
+			$lead_source            = $request->lead_source;
+			$interested_district    = $request->interested_district;
+			$interested_type        = $request->interested_type;
+			$cat                    = $request->cat;// seller,buyer
+			$from                   = $request->from;
+			$to                     = $request->to;
 
 
 		    $view_all = false;
@@ -1919,14 +1939,14 @@ class ClientController extends Controller {
             $sub_phones=[];
 			if($phone != "") {
 				$leads    = $leads->where('Phone', $phone)->orWhere('mobile', $phone)->orWhere('mobile_two', $phone)->orWhere('international_number', $phone);//->orWhereHas('sub',function ($query) use($phone)
-				$sub_phones = SubContact::where('phone',$phone)->orWhere('mobile_one',$phone)->orWhere('mobile_two',$phone)->orWhere('international_number',$phone)->pluck('user_id');
+				$sub_phones = SubContact::where('phone',$phone)->orWhere('mobile_one',$phone)->orWhere('mobile_two',$phone)->orWhere('international_number',$phone)->pluck('user_id')->toArray();
 			}
 
 
             $sub_mails = [];
 			if($email != "") {
 				$leads = $leads->where('email', $email)->orWhere('secondary_email',$email);
-				$sub_mails = SubContact::where('email',$email)->pluck('user_id');
+				$sub_mails = SubContact::where('email',$email)->pluck('user_id')->toArray();
 			}
 
 
@@ -1977,7 +1997,6 @@ class ClientController extends Controller {
             if ($request->project_id && count($request->project_id) > 0) {
             	$sub_projects = array_unique(ClientProject::whereIn('project_id',$request->project_id)->pluck('client_id')->toArray());
             }
-dd($leads->pluck('id')->toArray(),$sub_developers,$sub_projects,$sub_mails,$sub_phones);
 
             $arr = [];
             foreach ([$leads->pluck('id')->toArray(),$sub_developers,$sub_projects,$sub_mails,$sub_phones] as $key => $value) {
@@ -1992,21 +2011,95 @@ dd($leads->pluck('id')->toArray(),$sub_developers,$sub_projects,$sub_mails,$sub_
                   $ids = $arr[0];
             }
 
-            
+           
+
+		// if(auth()->user()->userRole->view_all_leads){
+
+		// 	$leads       = Client::whereIn('id',$ids)->where('newly_assigned',false)->limit(400)->get()->load('userDeleted');
+		// 	$no_leads    = Client::whereIn('id',$ids)->where('newly_assigned',true)->limit(400)->get()->load('userDeleted');
+		// 	$converted   = Client::whereIn('id',$ids)->where('converted',true)->limit(400)->get()->load('userDeleted');
+		// 	$view_all= true;
+	
+  //       } else if(auth()->user()->role_id == '2'){//
+
+		// 	$leads       = auth()->user()->clientsAssigned()->where('marked_deleted', false)->whereIn('id',$ids)->where('newly_assigned',false)->limit(400)->get()->load('userDeleted');
+		// 	$no_leads    = auth()->user()->clientsAssigned()->where('marked_deleted', false)->whereIn('id',$ids)->where('newly_assigned',true)->limit(400)->get()->load('userDeleted');
+		// 	$converted   = auth()->user()->clientsAssigned()->where('marked_deleted', false)->whereIn('id',$ids)->where('converted',true)->limit(400)->get()->load('userDeleted');
+  //       } else {
+
+		// 	$leads       = auth()->user()->clientsAssigned()->where('marked_deleted', false)->whereIn('id',$ids)->where('newly_assigned',false)->limit(400)->get()->load('userDeleted');
+		// 	$no_leads    = Client::whereIn('id',$ids)->where('newly_assigned',true)->limit(400)->get()->load('userDeleted');
+		// 	$converted   = auth()->user()->clientsAssigned()->where('marked_deleted', false)->whereIn('id',$ids)->where('converted',true)->limit(400)->get()->load('userDeleted');
+  //       }
+
+
+
+
+
 
 		if(auth()->user()->userRole->view_all_leads){
 
-			$leads       = Client::whereIn('id',$ids)->where('newly_assigned',false)->limit(400)->get()->load('userDeleted');
-			$no_leads    = Client::whereIn('id',$ids)->where('newly_assigned',true)->limit(400)->get()->load('userDeleted');
-			$converted   = Client::whereIn('id',$ids)->where('converted',true)->limit(400)->get()->load('userDeleted');
+			$leads 		= Client::with('userDeleted', 'userAssigned', 'district')->whereIn('id',$ids)
+			                                                                     ->where('is_customer', false)
+			                                                                     ->where('newly_assigned', false)
+			                                                                     ->where('converted', false)
+			                                                                     ->latest()->paginate(25);
+			$no_leads 	= Client::with('userDeleted', 'userAssigned', 'district')->whereIn('id',$ids)
+			                                                                 ->where('is_customer', false)
+			                                                                     ->where('newly_assigned', true)
+			                                                                     ->where('converted', false)
+			                                                                     ->latest()->paginate(25);
+			$converted 	= Client::with('userDeleted', 'userAssigned', 'district')->whereIn('id',$ids)
+			                                                                 ->where('is_customer', false)
+			                                                                     ->where('converted', true)
+			                                                                     ->where('newly_assigned', false)
+			                                                                     ->latest()->paginate(25);
 			$view_all= true;
-	
-        } else {//
+		} else if(auth()->user()->role_id == '2') {
 
-			$leads       = auth()->user()->clientsAssigned()->where('marked_deleted', false)->whereIn('id',$ids)->where('newly_assigned',false)->limit(400)->get()->load('userDeleted');
-			$no_leads    = auth()->user()->clientsAssigned()->where('marked_deleted', false)->whereIn('id',$ids)->where('newly_assigned',true)->limit(400)->get()->load('userDeleted');
-			$converted   = auth()->user()->clientsAssigned()->where('marked_deleted', false)->whereIn('id',$ids)->where('converted',true)->limit(400)->get()->load('userDeleted');
-        }
+			$leads 		= auth()->user()->clientsAssigned()->with('district')->whereIn('id',$ids)
+			                                                                 ->where('marked_deleted', false)
+			                                                                 ->where('is_customer', false)
+			                                                                 ->where('newly_assigned', false)
+			                                                                 ->where('converted', false)
+			                                                                 ->latest()->paginate(25);
+			$no_leads 	= auth()->user()->clientsAssigned()->with('district')->whereIn('id',$ids)
+			                                                                 ->where('marked_deleted', false)
+			                                                                 ->where('is_customer', false)
+			                                                                 ->where('newly_assigned', true)
+			                                                                 ->where('converted', false)
+			                                                                 ->latest()->paginate(25);
+			$converted 	= auth()->user()->clientsAssigned()->with('district')->whereIn('id',$ids)
+			                                                                 ->where('marked_deleted', false)
+			                                                                 ->where('is_customer', false)
+			                                                                 ->where('converted', true)
+			                                                                 ->where('newly_assigned', false)
+			                                                                 ->latest()->paginate(25);
+		} else {
+
+			$leads 		= auth()->user()->clientsAssigned()->with('district')->whereIn('id',$ids)
+			                                                                 ->where('marked_deleted', false)
+			                                                                 ->where('is_customer', false)
+			                                                                 ->where('newly_assigned', false)
+			                                                                 ->where('converted', false)
+			                                                                 ->latest()->paginate(25);
+			$no_leads 	= Client::with('userDeleted', 'userAssigned', 'district')->whereIn('id',$ids)
+			                                                                 ->where('marked_deleted', false)
+			                                                                     ->where('is_customer', false)
+			                                                                     ->where('newly_assigned', true)
+			                                                                     ->where('converted', false)
+			                                                                     ->latest()->paginate(25);
+			$converted 	= auth()->user()->clientsAssigned()->with('district')->whereIn('id',$ids)
+			                                                                 ->where('marked_deleted', false)
+			                                                                 ->where('is_customer', false)
+			                                                                 ->where('converted', true)
+			                                                                 ->where('newly_assigned', false)
+			                                                                 ->latest()->paginate(25);
+
+		}
+
+
+
 
 
 		PageTitle::add('Search Results');

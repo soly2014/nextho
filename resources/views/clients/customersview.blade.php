@@ -30,8 +30,10 @@
                                         </thead>
                                         <tbody>
                             @foreach(auth()->user()->soldProperties as $props)
-                              @if(!$props->comment_seen && $props->created_by == auth()->user()->id)
-                                            <tr><td>{{ $props->Client->last_name }}</td>
+                              @php $owner = $props->shared_with ? $props->shared_with  : $props->created_by;  @endphp
+                              @if(!$props->comment_seen && $owner == auth()->user()->id && !$props->approved && !$props->pending)
+
+                                            <tr><td>{{ $props->Client->name.' '.$props->Client->last_name }}</td>
                                                 <td>{{ $props->saleInfo ? $props->saleInfo->Type->label : ''}}</td>
                                                 <td>{{ $props->saleInfo ? number_format($props->saleInfo->sold_price, 0) : '' }} EGP</td>
                                                 <td>{{ $props->saleInfo ? $props->saleInfo->unit_area : '' }}</td>

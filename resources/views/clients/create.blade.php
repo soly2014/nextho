@@ -166,7 +166,7 @@
                                     <label class="col-sm-3 control-label text-right" for="project_id">Projects:</label>
                                     <div class="col-sm-9">
                                         <select name="project_id[]" id="e1" class="form-control input-sm minor" multiple>
-                                            @foreach(\App\Models\ParameterProject::all() as $V)
+                                            @foreach(\App\Models\ParameterProject::where('published',true)->get() as $V)
                                                 <option value="{{ $V->id }}">{{ $V->name }}</option>
                                             @endforeach
                                         </select>
@@ -184,7 +184,7 @@
                                  @else
                                  <div class="form-group">
                                  @endif
-                                    <label class="col-sm-3 control-label" for="assign_to">Assign To:</label>
+                                    <label class="col-sm-3 control-label" for="assign_to">Assign To: <span class="text-danger">*</span></label>
                                     <div class="col-sm-9">
                                         <select name="assign_to" class="form-control input-sm minor">
                                             @foreach($users as $k=>$v)
@@ -231,7 +231,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label" for="lead_status">Lead Status:</label>
+                            <label class="col-sm-3 control-label" for="lead_status">Lead Status: <span class="text-danger">*</span></label>
                             <div class="col-sm-9">
                                 <select name="lead_status" class="form-control input-sm">
                                     @foreach($lead_status as $k=>$v)
@@ -244,7 +244,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label" for="lead_source">Lead Source:</label>
+                            <label class="col-sm-3 control-label" for="lead_source">Lead Source: <span class="text-danger">*</span></label>
                             <div class="col-sm-9">
                                 <select name="lead_source" class="form-control input-sm">
                                     @foreach($lead_source as $k=>$v)
@@ -260,7 +260,7 @@
 
                         <!-- MY EDIT START -->
                         <div class="form-group">
-                            <label class="col-sm-3 control-label" for="lead_status">Rent/Buyer/seller:</label>
+                            <label class="col-sm-3 control-label" for="lead_status">Rent/Buyer/seller: <span class="text-danger">*</span></label>
                             <div class="col-sm-9">
                                 <select name="cat" class="form-control">
                                     @foreach(array('1' => '-None-', 'Rent' => 'Wanna Rent', 'Buyer' => 'Buyer', 'Seller' => 'Seller', 'Renter' => 'Has Property To Rent') as $k=>$v)
@@ -276,7 +276,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label text-right" for="interested_district">District Interested In:</label>
+                                    <label class="col-sm-3 control-label text-right" for="interested_district">District Interested In: <span class="text-danger">*</span></label>
                                     <div class="col-sm-9">
                                         <select name="interested_district" class="form-control input-sm minor">
                                             @foreach($districts as $k=>$V)
@@ -291,7 +291,7 @@
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label text-right" for="interested_type">Property Type Interested In:</label>
+                                    <label class="col-sm-3 control-label text-right" for="interested_type">Property Type Interested In: <span class="text-danger">*</span></label>
                                     <div class="col-sm-9">
                                         <select name="interested_type" class="form-control input-sm minor">
                                             @foreach($types as $k=>$V)
@@ -306,11 +306,11 @@
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label text-right" for="developer_id">Developers:</label>
+                                    <label class="col-sm-3 control-label text-right" for="developer_id">Developers: <span class="text-danger">*</span></label>
                                     <div class="col-sm-9">
                                         <select name="developer_id[]" id="e2" class="form-control input-sm minor" multiple>
                                                 <option value="">--None--</option>
-                                            @foreach(\App\Models\Developer::all() as $v)
+                                            @foreach(\App\Models\Developer::where('published',true)->get() as $v)
                                                 <option value="{{ $v->id }}">{{ $v->name }}</option>
                                             @endforeach
                                         </select>

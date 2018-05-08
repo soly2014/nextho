@@ -21,7 +21,7 @@
 		<!--/ panel heading/header -->
 		@if($noaction_leads)
 		<div class="col-sm-12">
-			<h3 class="thin-title mt10">Leads With No Action</h3>
+			<h3 class="thin-title mt10">New Leads</h3>
 		</div>
 		<div class="table-responsive panel-collapse pull out" style="">
 			<table class="table table-bordered table-hover responsive datatable" id="">
@@ -45,7 +45,7 @@
 					<tr>
 						<td><a href="{{ route('leads-view-single', $lead->id) }}">{{ $lead->name }} {{ $lead->last_name }}</a>
 							@if($lead->newly_assigned)
-							- <span class="label label-warning">No Action</span>
+							- <span class="label label-warning">New Lead</span>
 							@endif
 							@if($lead->marked_deleted)
 							- <span class="label label-danger" title="{{ 'Deleted by '.$lead->userDeleted->username.' at '.$lead->deleted_at }}">Deleted</span>
@@ -83,70 +83,7 @@
 		</div>
 		<br />
 		@endif
-		<!-- panel body with collapse capabale -->
-		<div class="table-responsive panel-collapse pull out" style="">
-			<table class="table table-bordered table-hover responsive {{ isset($pag) ? '' : 'datatable' }}" id="">
-				<thead>
-					<tr>
-						<th>Lead Name</th>
-						<th>Interested In(District)</th>
-						<th>Interested In(Type)</th>
-						<th width="10%">Phone</th>
-						<th>Mobile</th>
-						<th>Created At</th>
-						<th>Category</th>
-						@if($view_all)
-						<th width="15%">Assigned To</th>
-						@endif
-						<th width="10%">Action</th>
-					</tr>
-				</thead>
-				<tbody>
 
-					@foreach($leads as $lead)
-					<tr>
-						<td><a href="{{ route('leads-view-single', $lead->id) }}">{{ $lead->name }} {{ $lead->last_name }}</a>
-							@if($lead->newly_assigned)
-							- <span class="label label-warning">No Action</span>
-							@endif
-							@if($lead->marked_deleted)
-							- <span class="label label-danger" title="{{ 'Deleted by '.$lead->userDeleted->username.' at '.$lead->deleted_at }}">Deleted</span>
-							@endif
-
-						</td>
-						<td>{{ $lead->district->label }}</td>
-						<td>{{ $lead->type->label }}</td>
-						<td>{{ $lead->Phone }}</td>
-						<td>{{ $lead->mobile }}</td>
-						<td>{{ $lead->created_at }}</td>
-						<td>{{ $lead->cat }}</td>
-						@if($view_all)
-						<td>{{ $lead->userAssigned->username }}</td>
-						@endif
-						<td>
-							<div class="toolbar">
-								<div class="btn-group">
-									<button type="button" class="btn btn-sm btn-default dropdown-toggle btn-xs" data-toggle="dropdown">Action</button>
-									<button type="button" class="btn btn-sm btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
-										<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu dropdown-menu-right">
-										<li><a href="{{ route('leads-modify-single', $lead->id) }}"><i class="icon ico-pencil"></i>Edit</a></li>
-										<li class="divider"></li>
-										<li><a href="{{ route('leads-view-single', $lead->id) }}"><i class="icon ico-print3"></i>View</a></li>
-									</ul>
-								</div>
-							</div>
-						</td>
-					</tr>
-					@endforeach
-				</tbody>
-			</table>
-			{{-- @if(isset($pag) && $pag)
-			{{ $leads->appends(Request::except('page'))->links() }}
-			@endif --}}
-		</div></div>
-		<!--/ panel body with collapse capabale -->
 
 
 		@if($converted)
@@ -214,6 +151,73 @@
 		</div>
 		<!--/ panel body with collapse capabale -->
 		@endif
+
+         </br></br>
+		<!-- panel body with collapse capabale -->
+		<div class="table-responsive panel-collapse pull out" style="">
+			<table class="table table-bordered table-hover responsive {{ isset($pag) ? '' : 'datatable' }}" id="">
+				<thead>
+					<tr>
+						<th>Lead Name</th>
+						<th>Interested In(District)</th>
+						<th>Interested In(Type)</th>
+						<th width="10%">Phone</th>
+						<th>Mobile</th>
+						<th>Created At</th>
+						<th>Category</th>
+						@if($view_all)
+						<th width="15%">Assigned To</th>
+						@endif
+						<th width="10%">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					@foreach($leads as $lead)
+					<tr>
+						<td><a href="{{ route('leads-view-single', $lead->id) }}">{{ $lead->name }} {{ $lead->last_name }}</a>
+							@if($lead->newly_assigned)
+							- <span class="label label-warning">No Action</span>
+							@endif
+							@if($lead->marked_deleted)
+							- <span class="label label-danger" title="{{ 'Deleted by '.$lead->userDeleted->username.' at '.$lead->deleted_at }}">Deleted</span>
+							@endif
+
+						</td>
+						<td>{{ $lead->district->label }}</td>
+						<td>{{ $lead->type->label }}</td>
+						<td>{{ $lead->Phone }}</td>
+						<td>{{ $lead->mobile }}</td>
+						<td>{{ $lead->created_at }}</td>
+						<td>{{ $lead->cat }}</td>
+						@if($view_all)
+						<td>{{ $lead->userAssigned->username }}</td>
+						@endif
+						<td>
+							<div class="toolbar">
+								<div class="btn-group">
+									<button type="button" class="btn btn-sm btn-default dropdown-toggle btn-xs" data-toggle="dropdown">Action</button>
+									<button type="button" class="btn btn-sm btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+										<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu dropdown-menu-right">
+										<li><a href="{{ route('leads-modify-single', $lead->id) }}"><i class="icon ico-pencil"></i>Edit</a></li>
+										<li class="divider"></li>
+										<li><a href="{{ route('leads-view-single', $lead->id) }}"><i class="icon ico-print3"></i>View</a></li>
+									</ul>
+								</div>
+							</div>
+						</td>
+					</tr>
+					@endforeach
+				</tbody>
+			</table>
+			{{-- @if(isset($pag) && $pag)
+			{{ $leads->appends(Request::except('page'))->links() }}
+			@endif --}}
+		</div></div>
+		<!--/ panel body with collapse capabale -->
+
 
 </div>
 @stop

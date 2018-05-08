@@ -37,16 +37,17 @@ class HomeController extends Controller {
         $activities = Activity::where('marked_deleted', false)
             ->where(function($query) use($Today, $logged_in){
                 $query->where('activity_owner', $logged_in)
+                      ->where('closed_by','=',null)
                       ->where('created_by', $logged_in);
             })->orderBy('due_date', 'ASC')->get()->load('activityType', 'activitable');
-        
+
         $other_activities = Activity::where('marked_deleted', false)
             ->where(function($query) use($Today, $logged_in){
                 $query->where('activity_owner', $logged_in)
+                      ->where('closed_by','=',null)
                       ->where('created_by','!=', $logged_in);
             })->orderBy('due_date', 'ASC')->get()->load('activityType', 'activitable');
         
-        // dd($other_activities);
         
         $year = $Today->year;
         

@@ -3,8 +3,17 @@
 @section('breadcrumbs')
 
 <ol class="breadcrumb breadcrumb-transparent nm">
+
+    @if(auth()->user()->role_id == '2')
     <li class="active" style="position: relative;"><i class="fa fa-envelope" style="font-size: 30px;color:#005da4;"></i><span class="badge" style="position: absolute;right: 0;bottom: 0;background-color: red;">
     {{ $new_leads }}</span></li>
+    @endif
+
+    @if(auth()->user()->role_id == '3')
+    <li class="active" style="position: relative;padding: 5px;"><i class="fa fa-thumbs-o-down" style="font-size: 30px;color:#005da4;"></i><span class="badge" style="position: absolute;left: 0;bottom: 0;background-color: red;">
+    {{ \App\Models\Client::where('newly_assigned',1)->count() }}</span></li>
+    @endif
+
     <li class="active">Dashboard</li>
 </ol>
 
@@ -12,7 +21,7 @@
 
 @section('content')
 
-@if(auth()->user()->role_id != '2')
+@if(auth()->user()->role_id != '3')
     <div class="col-sm-12">
         <div class="row">
             <div class="col-sm-12">
@@ -20,13 +29,13 @@
                     <div class="panel-heading">
                         <div class="panel-title ellipsis" >Production Chart</div>
                     </div>
-                    <div class="panel-body">
-                          <canvas id="myChart" style="width: 100%; height: 370px"></canvas>
+                    <div class="panel-body" id="ProductionChartDIV">
+                          <canvas id="myChart" style="height: 500px"></canvas>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="panel panel-default">
+                <div class="panel panel-default" id="MeetingsChartDIV">
                     <div class="panel-heading">
                         <div class="panel-title ellipsis" >Meetings</div>
                     </div>
@@ -35,7 +44,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading" id="CallsChartDIV">
                         <div class="panel-title ellipsis" >Calls</div>
                     </div>
                        <canvas id="Call" style="width: 550px; height:370px"></canvas>
@@ -280,7 +289,7 @@
             }
         });
 
-        @if(auth()->user()->role_id == '3')
+        @if(auth()->user()->role_id == '2')
         setInterval(function() {
             $.ajax({
                 type:'GET',
@@ -290,13 +299,17 @@
                     console.log(data.diff,data.new_count);
                 },
                 error:function(error){
-                    alert(error);
+                    //alert(error);
                 }
             });
         },2000);
         @endif
 
 
+        $('#myChart').width($('#ProductionChartDIV').width()-20);//
+        $('#Meeting').width($('#MeetingsChartDIV').width()-20);//
+        $('#Call').width($('#CallsChartDIV').width()-20);//
+        
  });
     
 

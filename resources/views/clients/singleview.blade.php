@@ -92,6 +92,18 @@ $lead = $object;
                             <label class="col-sm-9 control-label control-label-value">{{ $lead->mobile }}</label>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-3 control-label">Developers:</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ implode($lead->developers()->pluck('name')->toArray(),'|') }}</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Projects:</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ implode($lead->projects()->pluck('name')->toArray(),'|') }}</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Projects:</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ $lead->mobile }}</label>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-3 control-label">Email:</label>
                             <label class="col-sm-9 control-label control-label-value"><a href="mailto:{{ $lead->email }}">{{ $lead->email }}</a></label>
                         </div>

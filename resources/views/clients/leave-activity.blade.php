@@ -41,28 +41,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Status:</label>
-                                <div class="col-sm-9">
-                                    <select class="form-control input-sm" name="activity_status">
-                                        @foreach($activity_status as $k=>$v)
-                                          <option value="{{ $k }}">{{ $v }}</option>
-                                        @endforeach  
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="priority">Priority:</label>
-                                <div class="col-sm-9">
-                                    <select class="form-control input-sm" name="priority">
-                                        @foreach($activity_priority as $k=>$v)
-                                          <option value="{{ $k }}">{{ $v }}</option>
-                                        @endforeach  
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="clearfix">
                         <div class="col-sm-12">

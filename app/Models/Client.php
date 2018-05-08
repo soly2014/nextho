@@ -135,12 +135,12 @@ class Client extends Model  {
     //////////////////////////////////////////////////
     
     public function developers(){
-        return $this->hasMany('\App\Models\ClientDeveloper', 'client_id');
+        return $this->belongsToMany('\App\Models\Developer', 'clients_developers','client_id','developer_id');
     }
 
     
     public function projects(){
-        return $this->hasMany('\App\Models\ClientProject', 'client_id');
+        return $this->belongsToMany('\App\Models\ParameterProject','clients_projects', 'client_id','project_id');
     }
 
     public function sub(){
