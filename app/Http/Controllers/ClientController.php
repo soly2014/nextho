@@ -98,6 +98,7 @@ class ClientController extends Controller {
 	 */
 	public function getPreCreate()
 	{
+		session(['number_type_mobile'=>'','number_type_international_number'=>'']);
 		PageTitle::add('Create A New Lead');
 		return view('clients.pre-create', array(
 			'breadcrumbs' => array([
@@ -274,7 +275,8 @@ class ClientController extends Controller {
 
 		$this->validate($request,
 							 array(
-								 'name'                  => 'required',
+								 'name'                  => 'required|regex:/^[a-zA-Z]+$/u',
+								 'last_name'             => 'regex:/^[a-zA-Z]+$/u',
 								 'phone'                 => 'required_without_all:mobile,mobile_two,international_number',
 								 'mobile_two'            => 'required_without_all:mobile,phone,international_number|regex:/(01)[0-9]{9}/',
 								 'international_number'  => 'required_without_all:mobile,mobile_two,phone',
@@ -288,11 +290,11 @@ class ClientController extends Controller {
 								 'lead_status'		=> 'required|not_in:'.'9',
 								 'interested_district'	=> 'required|not_in:'.$select,
 								 'interested_type'    	=> 'required|not_in:'.'10',
-								 //'new_phone'                 => $request->new_phone ? 'required_without_all:mobile,mobile_two,international_number',
+								 'developer_id'         => 'required',
+								 'project_id'           => 'required',
 								 'new_mobile_one'            => $request->new_mobile_one ? 'regex:/(01)[0-9]{9}/' : '',
 								 'new_mobile_two'            => $request->new_mobile_two ? 'regex:/(01)[0-9]{9}/' : '',
 								 'new_email'                 => $request->email ? 'email' : ''
-								 //'new_international_number'  => $request->new_international_number ? 'required_without_all:mobile,mobile_two,phone',
 
 							 ), $messages
 						);
@@ -739,7 +741,7 @@ class ClientController extends Controller {
 				$country                = $request->country ? : '';
 				$city                   = $request->city ? : '';
 				$zip_code               = $request->zip_code ? : '';
-				$description            = $request->description;
+				$description            = auth()->user()->role_id == '2' ? $client->description : $request->description;
 				$interested_district    = $request->interested_district;
 				$interested_type        = $request->interested_type;
 				//MY EDIT
@@ -773,7 +775,7 @@ class ClientController extends Controller {
 					'city'              => $city,
 					'zip_code'          => $zip_code,
 					'description'       => $description,
-					'assigned_to'       => $request->assign_to,
+					'assigned_to'       => $request->assign_to ? $request->assign_to : $client->assigned_to,
 					'last_updated_by'   => $created_by,
 					//MY EDIT
 					'cat'				=> $cat

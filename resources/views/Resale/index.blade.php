@@ -20,7 +20,7 @@
         </div>
         <!--/ panel heading/header -->
         
-        <div class="table-responsive panel-collapse pull out text-center">
+        <div class="table-responsive panel-collapse pull out text-center wrapper">
             <table class="table table-bordered table-hover responsive text-center" id="Leads_Table">
                 <thead> 
                     <tr class="text-center">
@@ -94,6 +94,11 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('public/plugins/datatables/css/jquery.datatables.min.css') }}">
 <style type="text/css">
     table.th {  text-align: center; }
+    div.wrapper {
+      width: 100%;
+      height: 700px;
+      overflow: auto;
+    }
 </style>
 @stop
 

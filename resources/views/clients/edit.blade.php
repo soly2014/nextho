@@ -317,7 +317,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="description">Description <span class="text-danger">*</span>:</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" rows="4" cols="5" name="description" id="description" data-parsley-maxlength="5120" data-parsley-required>{{ $client->description }}</textarea>
+                                <textarea class="form-control" rows="4" cols="5" name="description" id="description" data-parsley-maxlength="5120" data-parsley-required @if(auth()->user()->role_id == '2') disabled="disabled" @endif>{{ $client->description }}</textarea>
                             </div>
                         </div>
                     </div>

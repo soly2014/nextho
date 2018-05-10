@@ -71,7 +71,7 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm full-width">
                                 {{-- Form::text('amount', null, ['id' => 'amount', 'class' => 'form-control input-sm', 'data-parsley-required']) --}}
-                                <input type="text" name="amount" id="amount" class="form-control input-sm" data-parsley-required>
+                                <input type="text" name="amount" id="amount" value="{{ $forecast->amount }}" class="form-control input-sm" data-parsley-required>
                                 <span class="input-group-addon">EGP</span>
                             </div>
                             @if($errors->has('amount'))

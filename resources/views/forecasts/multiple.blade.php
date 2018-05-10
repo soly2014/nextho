@@ -26,6 +26,7 @@
                         <th>Month</th>
                         <th>Year</th>
                         <th>Amount</th>
+                        <th>Agent</th>
                         <th width="12%">Action</th>
                     </tr>
                 </thead>
@@ -35,7 +36,8 @@
                         <tr>
                             <td>{{ $Months[$forecast->month] }}</td>
                             <td>{{ $forecast->year }}</td>
-                            <td>{{ number_format($forecast->sum, 0) }} EGP</td>
+                            <td>{{ number_format($forecast->amount, 0) }} EGP</td>
+                            <td>{{ \App\Models\User::find($forecast->agent_id) ? \App\Models\User::find($forecast->agent_id)->username : '' }}</td>
                             <td>
                                 <div class="toolbar">
                                     <div class="btn-group">
@@ -44,9 +46,9 @@
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-right">
-                                            {{-- <li><a href="{{ route('forecast-modify', array($forecast->id)) }}"><i class="icon ico-pencil"></i>Edit</a></li> --}}
+                                            <li><a href="{{ route('forecast-modify', array($forecast->id)) }}"><i class="icon ico-pencil"></i>Edit</a></li>
                                             <li class="divider"></li>
-                                            <li><a href="{{ route('forecast-view-multiple', array($forecast->month,$forecast->year)) }}"><i class="icon ico-print3"></i>View</a></li>
+                                            <li><a href="{{ route('forecast-view-single', array($forecast->id)) }}"><i class="icon ico-print3"></i>View</a></li>
                                         </ul>
                                     </div>
                                 </div>

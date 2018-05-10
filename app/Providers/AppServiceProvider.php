@@ -181,7 +181,7 @@ class AppServiceProvider extends ServiceProvider
 
 
 
-            View::composer(['forecasts.view', 'forecasts.create', 'forecasts.modify', 'forecasts.singleview'], function($view)
+            View::composer(['forecasts.view','forecasts.multiple', 'forecasts.create', 'forecasts.modify', 'forecasts.singleview'], function($view)
             {
                 $months = array(
                     '1'     => 'January',

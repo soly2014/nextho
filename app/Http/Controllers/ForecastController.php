@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use \App\Models\{Activity,ClientProperty,Forecast,User,Client,UserAction,ClientSource,ClientStatus,ClientUser,Project,UnitType,Note,Attachment,Forcast};
 use Illuminate\Http\Request;
-use PageTitle;
+use PageTitle,DB;
 
 
 class ForecastController extends Controller {
@@ -15,8 +15,9 @@ class ForecastController extends Controller {
      * @return [type] [description]
      */
     public function getAll(){
-        $forecasts = Forecast::all()->load('associatedRole', 'userCreated');
-        
+
+        $forecasts = Forecast::select(DB::Raw('sum(amount) as sum'),'month','year')->groupBy('month','year')->latest()->get();
+
         PageTitle::add('View All Forecasts');
         return view('forecasts.view', array(
             'breadcrumbs' => array([
@@ -63,7 +64,7 @@ class ForecastController extends Controller {
         $year = $request->year;
              $this->validate($request, 
                  array(
-                     'amount' => 'required|integer'
+                     'amount' => 'required'
                  )
             );
 
@@ -156,16 +157,15 @@ class ForecastController extends Controller {
      * @return [type]     [description]
      */
     public function postModify(Request $request,$id){
-// dd($request->all());
+
         $forecast = Forecast::where('id', $id)->first();
-        
         if($forecast){
             $year = $request->year;
 
             $validator = $this->validate($request, 
                  array(
-                     'amount'             => 'required|integer',
-                     'month'              => $month_validator
+                     'amount'             => 'required',
+                     'month'              => 'required'
                  )
             );
 
@@ -198,5 +198,28 @@ class ForecastController extends Controller {
             return redirect()->route('forecast-view');
         }
     }
+    /**
+     * [getMultiple description]
+     * @param  string $value [description]
+     * @return [type]        [description]
+     */
+    public function getMultiple($month,$year)
+    {
+        $forecasts = Forecast::where(['year'=>$year,'month'=>$month])->latest()->get();
 
+        PageTitle::add('View All Forecasts');
+        return view('forecasts.multiple', array(
+            'breadcrumbs' => array([
+                array([
+                    'crumb_name' => 'Forecasts',
+                    'crumb_link' => ''
+                ])
+                ,array([
+                    'crumb_name' => 'View All',
+                    'crumb_link' => 'forecast-view'
+                ])
+            ]),
+            'forecasts' => $forecasts
+        ));
+    }
 }

@@ -323,30 +323,12 @@
                     </div>
 
 
-                <hr class="dotted">
+                {{-- <hr class="dotted"> --}}
  
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label" for="new_first_name">Client Name <span class="text-danger">*</span>:</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <input type="text" name="client_name" value="{{ $resale->client_name }}" class="form-control input-sm">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {{--  --}}
 
  
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label" for="new_first_name">mobile <span class="text-danger">*</span>:</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <input type="text" name="mobile" value="{{ $resale->mobile }}" class="form-control input-sm">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
  
  
 

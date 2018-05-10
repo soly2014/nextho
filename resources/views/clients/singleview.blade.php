@@ -71,26 +71,34 @@ $lead = $object;
 
                 <div class="row">
                     <div class="col-md-6">
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Name:</label>
                             <label class="col-sm-9 control-label control-label-value">{{ $lead->title  }} {{ $lead->name }}</label>
                         </div>
+
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Company:</label>
-                            <label class="col-sm-9 control-label control-label-value">{{ $lead->company }}</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ $lead->company ?? '======' }}</label>
                         </div>
+
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Title:</label>
-                            <label class="col-sm-9 control-label control-label-value">{{ $lead->work_title }}</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ $lead->work_title != '' ? $lead->work_title : '========'}}</label>
                         </div>
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Phone:</label>
-                            <label class="col-sm-9 control-label control-label-value">{{ $lead->Phone }}</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ $lead->Phone ?? '======'}}</label>
                         </div>
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Mobile:</label>
                             <label class="col-sm-9 control-label control-label-value">{{ $lead->mobile }}</label>
                         </div>
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Developers:</label>
                             <label class="col-sm-9 control-label control-label-value">{{ implode($lead->developers()->pluck('name')->toArray(),'|') }}</label>
@@ -99,14 +107,12 @@ $lead = $object;
                             <label class="col-sm-3 control-label">Projects:</label>
                             <label class="col-sm-9 control-label control-label-value">{{ implode($lead->projects()->pluck('name')->toArray(),'|') }}</label>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Projects:</label>
-                            <label class="col-sm-9 control-label control-label-value">{{ $lead->mobile }}</label>
-                        </div>
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Email:</label>
                             <label class="col-sm-9 control-label control-label-value"><a href="mailto:{{ $lead->email }}">{{ $lead->email }}</a></label>
                         </div>
+
                         <div class="row">
                             <div class="col-sm-5">
                                 <div class="form-group">
@@ -136,16 +142,18 @@ $lead = $object;
                         </div>
                     </div>
                     <div class="col-md-6">
-
+                        @if($lead->last_name != '')
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Last Name:</label>
                             <label class="col-sm-9 control-label control-label-value">{{ $lead->last_name }}</label>
                         </div>
-
+                        @endif
+                        @if($lead->fax != '')
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Fax:</label>
                             <label class="col-sm-9 control-label control-label-value">{{ $lead->fax }}</label>
                         </div>
+                        @endif
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Lead Source:</label>
                             <label class="col-sm-9 control-label control-label-value">{{ $lead->source->label }}</label>
@@ -154,10 +162,12 @@ $lead = $object;
                             <label class="col-sm-3 control-label">Lead Status:</label>
                             <label class="col-sm-9 control-label control-label-value">{{ $lead->status ? $lead->status->label : '' }}</label>
                         </div>
+                        @if($lead->secondary_email != '')
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Secondary Email:</label>
                             <label class="col-sm-9 control-label control-label-value"><a href="mailto:{{ $lead->secondary_email }}">{{ $lead->secondary_email }}</a></label>
                         </div>
+                        @endif
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Category:</label>

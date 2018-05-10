@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Resale;
+use App\Models\{Resale,Client};
 use Illuminate\Http\Request;
 use DB,Carbon\Carbon;
 
@@ -30,7 +30,8 @@ class ResaleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
+    { 
+        \Session::get('mobile');
         return view('resale.create');
     }
 
@@ -61,21 +62,34 @@ class ResaleController extends Controller
               'seller_commission' => 'required',
               'installment' => 'required',
               'delivery_date' => 'required',
-              'client_name' => 'required',
               'mobile' => 'required'
         ]);
 
         if (!in_array($request->mobile,$this->getPhones())) {
+
+              session(['number_type_mobile'=>'','number_type_international_number'=>'']);
+
                return response()->json(['success'=>false,'message'=>'<div class="alert alert-warning"><strong>Error!</strong> You Should Add Lead First.<a href="'.route('leads-create-get').'" class="btn btn-danger">Add New Lead</a></div>']);      
         }
 
         $data = array_except($request->all(),['_token','delivery_date','submit','unit_placed_in']);
         $approved = auth()->user()->role_id == '1' ? true : false;
+        $client = Client::where('Phone',$request->mobile)->orWhere('mobile',$request->mobile)
+                              ->orWhere('mobile_two',$request->mobile)->orWhere('international_number',$request->mobile)
+                              ->orWhereHas('sub',function($query)use($request){
+                                  $query->where('phone',$request->mobile)
+                                        ->orWhere('mobile_one',$request->mobile)
+                                        ->orWhere('mobile_two',$request->mobile)
+                                        ->orWhere('international_number',$request->mobile);
+                              })->first();
+        
+
         $new_data = array_merge($data,[
                                         'date'=>\Carbon\Carbon::now(),
                                         'delivery_date'=>\Carbon\Carbon::parse($request->delivery_date),
                                         'created_by' => auth()->user()->id,
                                         'unit_now' => 'available',
+                                        'client_name' => $client->name.' '.$client->last_name,
                                         'approved' => $approved,
                                         'unit_placed_in' => auth()->user()->role_id == '1' ? json_encode($request->unit_placed_in) : json_encode([]),
                                     ]);
@@ -133,15 +147,12 @@ class ResaleController extends Controller
               'unit_placed_in' => 'required',
               'seller_commission' => 'required',
               'installment' => 'required',
-              'delivery_date' => 'required',
-              'client_name' => 'required',
-              'mobile' => 'required'
+              'delivery_date' => 'required'
         ]);
 
         if (!in_array($request->mobile,$this->getPhones())) {
                return response()->json(['success'=>false,'message'=>'<div class="alert alert-warning"><strong>Error!</strong> You Should Add Lead First.<a href="'.route('leads-create-get').'" class="btn btn-danger">Add New Lead</a></div>']);      
         }
-
 
         $data = array_except($request->all(),['_token','delivery_date','submit','unit_placed_in']);
         $approved = auth()->user()->role_id == '1' ? true : false;
@@ -180,9 +191,9 @@ class ResaleController extends Controller
    {
 
      $unit_price_from = $request->unit_price_from != '' ? (int)$request->unit_price_from : 0;
-     $unit_price_to = $request->unit_price_to != '' ? (int)$request->unit_price_to : 1000000000000;
+     $unit_price_to = $request->unit_price_to != '' ? (int)$request->unit_price_to : 100000000000000;
      $down_payment_from = $request->down_payment_from != '' ? (int)$request->down_payment_from : 0;
-     $down_payment_to = $request->down_payment_to != '' ? (int)$request->down_payment_to : 1000000000000;
+     $down_payment_to = $request->down_payment_to != '' ? (int)$request->down_payment_to : 100000000000000;
 
 // dd($request->all(),$unit_price_from,$unit_price_to,$down_payment_from,$down_payment_to);
       $builder = Resale::select('*');

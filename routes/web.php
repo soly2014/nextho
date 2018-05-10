@@ -848,7 +848,12 @@ Route::group(array('middleware' => 'NewAuth'), function() {
         Route::get('/forecast/{id}/modify', array(
             'as' => 'forecast-modify',
             'uses' => 'ForecastController@getModify'
-        ));
+        ));//
+
+        Route::get('/forecast-multiple/{month}/{year}', array(
+            'as' => 'forecast-view-multiple',
+            'uses' => 'ForecastController@getMultiple'
+        ));//forecast-view-multiple
    });
     
    Route::group(array('middleware' => 'users.manage'), function() {

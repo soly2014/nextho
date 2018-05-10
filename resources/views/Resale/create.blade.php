@@ -307,7 +307,7 @@
 
                 <hr class="dotted">
  
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="new_first_name">Client Name <span class="text-danger">*</span>:</label>
                             <div class="col-sm-9">
@@ -316,7 +316,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
  
                     <div class="col-md-6">

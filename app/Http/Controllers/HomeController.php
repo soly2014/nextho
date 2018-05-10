@@ -38,6 +38,7 @@ class HomeController extends Controller {
             ->where(function($query) use($Today, $logged_in){
                 $query->where('activity_owner', $logged_in)
                       ->where('closed_by','=',null)
+                      ->whereDate('due_date',DB::raw('CURDATE()'))
                       ->where('created_by', $logged_in);
             })->orderBy('due_date', 'ASC')->get()->load('activityType', 'activitable');
 
@@ -45,6 +46,7 @@ class HomeController extends Controller {
             ->where(function($query) use($Today, $logged_in){
                 $query->where('activity_owner', $logged_in)
                       ->where('closed_by','=',null)
+                      ->whereDate('due_date',DB::raw('CURDATE()'))
                       ->where('created_by','!=', $logged_in);
             })->orderBy('due_date', 'ASC')->get()->load('activityType', 'activitable');
         
@@ -57,7 +59,6 @@ class HomeController extends Controller {
  */
 if(auth()->user()->role_id != 1){
 
-			//->where('approved', true)->where('year', $year)->groupBy('month', 'year')->get()->toJson();
 			$soldProperties = auth()->user()->soldProperties()->selectRaw('sum(price) as aggregate, month')->where('year', $year)->where('approved', true)->groupBy('month', 'year')->orderBy('month', 'ASC')->pluck('aggregate', 'month');
 
 			$forecasts = Forecast::where('marked_deleted', false)->where('year', $year)->orderBy('month')->pluck('amount', 'month');

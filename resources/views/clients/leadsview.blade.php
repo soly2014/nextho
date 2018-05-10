@@ -28,12 +28,12 @@
 				<thead>
 					<tr>
 						<th>Lead Name</th>
-						<th>Interested In(District)</th>
-						<th width="10%">Phone</th>
 						<th>Mobile</th>
-						<th>Created At</th>
+						<th>Interested In(District)</th>
 						<th>Category</th>
-						@if($view_all)
+						<th>Intersted</th>
+						<th>Created At</th>
+						@if($view_all || auth()->user()->role_id == '3')
 						<th width="15%">Assigned To</th>
 						@endif
 						<th width="10%">Action</th>
@@ -52,13 +52,12 @@
 							@endif
 
 						</td>
-						<td>{{ $lead->district->label }}</td>
-						<!-- <td>{{ ($lead->Phone) ? $lead->Phone : $lead->mobile }}</td> -->
-						<td>{{ $lead->phone }}</td>
 						<td>{{ $lead->mobile }}</td>
-						<td>{{ $lead->created_at }}</td>
+						<td>{{ $lead->district->label }}</td>
 						<td>{{ $lead->cat }}</td>
-						@if($view_all)
+						<td>{{ $lead->type->label }}</td>
+						<td>{{ $lead->created_at }}</td>
+						@if($view_all || auth()->user()->role_id == '3')
 						<td>{{ $lead->userAssigned->username }}</td>
 						@endif
 						<td>
@@ -83,7 +82,7 @@
 		</div>
 		<br />
 		@endif
-
+    </div>
 
 
 		@if($converted)
@@ -92,13 +91,12 @@
 				<thead>
 					<tr>
 						<th>Lead Name</th>
-						<th>Interested In(District)</th>
-						<th>Interested In(Type)</th>
-						<th width="10%">Phone</th>
 						<th>Mobile</th>
-						<th>Created At</th>
+						<th>Interested In(District)</th>
 						<th>Category</th>
-						@if($view_all)
+						<th>Intersted</th>
+						<th>Created At</th>
+						@if($view_all || auth()->user()->role_id == '3')
 						<th width="15%">Assigned To</th>
 						@endif
 						<th width="10%">Action</th>
@@ -117,13 +115,12 @@
 							@endif
 
 						</td>
-						<td>{{ $lead->district->label }}</td>
-						<td>{{ $lead->type->label }}</td>
-						<td>{{ $lead->Phone }}</td>
 						<td>{{ $lead->mobile }}</td>
-						<td>{{ $lead->created_at }}</td>
+						<td>{{ $lead->district->label }}</td>
 						<td>{{ $lead->cat }}</td>
-						@if($view_all)
+						<td>{{ $lead->type->label }}</td>
+						<td>{{ $lead->created_at }}</td>
+						@if($view_all || auth()->user()->role_id == '3')
 						<td>{{ $lead->userAssigned->username }}</td>
 						@endif
 						<td>
@@ -159,13 +156,12 @@
 				<thead>
 					<tr>
 						<th>Lead Name</th>
-						<th>Interested In(District)</th>
-						<th>Interested In(Type)</th>
-						<th width="10%">Phone</th>
 						<th>Mobile</th>
-						<th>Created At</th>
+						<th>Interested In(District)</th>
 						<th>Category</th>
-						@if($view_all)
+						<th>Intersted</th>
+						<th>Created At</th>
+						@if($view_all || auth()->user()->role_id == '3')
 						<th width="15%">Assigned To</th>
 						@endif
 						<th width="10%">Action</th>
@@ -184,13 +180,12 @@
 							@endif
 
 						</td>
-						<td>{{ $lead->district->label }}</td>
-						<td>{{ $lead->type->label }}</td>
-						<td>{{ $lead->Phone }}</td>
 						<td>{{ $lead->mobile }}</td>
-						<td>{{ $lead->created_at }}</td>
+						<td>{{ $lead->district->label }}</td>
 						<td>{{ $lead->cat }}</td>
-						@if($view_all)
+						<td>{{ $lead->type->label }}</td>
+						<td>{{ $lead->created_at }}</td>
+						@if($view_all || auth()->user()->role_id == '3')
 						<td>{{ $lead->userAssigned->username }}</td>
 						@endif
 						<td>
@@ -226,7 +221,7 @@
 <style type="text/css">
 	.select2 {
 				width:100%!important;
-				}
+	}
 
 </style>
 <link rel="stylesheet" type="text/css" href="{{ asset('public/plugins/datatables/css/jquery.datatables.min.css') }}">

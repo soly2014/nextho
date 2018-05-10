@@ -54,6 +54,9 @@
             <a href="javascript:void(0);" data-target="#sales" data-toggle="submenu" data-parent=".topmenu">
                 <span class="figure"><i class="ico-dollar"></i></span>
                 <span class="text">Sales</span>
+                @if($pending_requests > 0)
+                 <span class="number"><span class="label label-danger">{{$pending_requests}}</span></span>
+                @endif                
                 <span class="arrow"></span>
             </a>
             <ul id="sales" class="submenu collapse {{ (Request::is('sale/*') ? 'in' : '') }}" >
@@ -68,9 +71,6 @@
                 <li class="{{ ((Request::is('sale/cancel/*') || Route::is('leads-confirm')) ? 'active' : '') }}">
                     <a href="{{ route('leads-confirm') }}">
                         <span class="text">Pending Sales Requests</span>
-                        @if($pending_requests > 0)
-                        <span class="number"><span class="label label-danger">{{$pending_requests}}</span></span>
-                        @endif
                     </a>
                 </li>
             </ul>
@@ -114,6 +114,10 @@
                 <a href="javascript:void(0);" data-target="#units" data-toggle="submenu" data-parent=".topmenu">
                     <span class="figure"><i class="ico-office"></i></span>
                     <span class="text">Resale</span>
+                    @if(auth()->user()->role_id == '1' && \App\Models\Resale::where('approved',false)->count() > 0)
+                     <span class="number"><span class="label label-danger">{{\App\Models\Resale::where('approved',false)->count()}}</span></span>
+                    @endif                
+
                     <span class="arrow"></span>
                 </a>
                 <ul id="units" class="submenu collapse {{ (Request::is('resales/*') ? 'in' : '') }}" >

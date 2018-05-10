@@ -110,6 +110,7 @@ class UserController extends Controller {
      * @return [type]     [description]
      */
     public function getUser($id){
+        
         $user = User::where('id', $id)->first();
 
         PageTitle::add(('View "'.$user->username.'" Details'));

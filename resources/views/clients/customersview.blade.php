@@ -15,7 +15,6 @@
                             <div class="panel-title ellipsis" >Rejected Sales Reasons</div>
                         </div>
                         <div class="panel-body">
-
                                   <table class="table table-bordered table-hover responsive" id="simple_table">
                                         <thead>
                                             <tr>
@@ -68,10 +67,11 @@
         <div class="table-responsive panel-collapse pull out" style="">
             <table class="table table-bordered table-hover responsive" id="Leads_Table">
                 <thead>
-                    <tr>
+                    <tr>{{-- Customer Name, Number Of Sold Units,Developers, Project Name, Sales Volume, assigned To --}}
                         <th>Customer Name</th>
-                        <th>Company</th>
                         <th>Number of Sold Units</th>
+                        <th>Developers</th>
+                        <th>Project</th>
                         <th>Sales Volume</th>
                         @if($view_all)
                         <th>Assigned To</th>
@@ -83,8 +83,9 @@
                     @foreach($clients as $client)
                     <tr>
                         <td><a href="{{ route('customers-view-single', [$client->id]) }}">{{ $client->name }} {{ $client->last_name }}</a></td>
-                        <td>{{ $client->company }}</td>
                         <td>{{ $client->propertiesCount }}</td>
+                        <td>{{ implode($client->projects()->pluck('name')->toArray(),'|')  }}</td>
+                        <td>{{ implode($client->developers()->pluck('name')->toArray(),'|')  }}</td>
                         <td>{{ number_format($client->propertiesAmount, 0) }} EGP</td>
                         @if($view_all)
                         <td>{{ $client->userAssigned->username }}</td>
@@ -141,23 +142,24 @@
 <script type="text/javascript" src="{{ asset('public/plugins/datatables/js/jquery.datatables-custom.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('public/javascript/tables/datatable.js') }}"></script>
 <script type="text/javascript">
+       $(document).ready(function(){
             $('.seen').on('click',function () {
-              var id = $(this).data('id');
-              var c  = confirm('make comment seen');
-              if (c) {
-                $.ajax({
-                    type:'POST',
-                    url :'{{ route('mark.reject.seen') }}',
-                    data:{id:id},
-                    success:function(data){
-                        if (data.success == true) {
-                           location.reload();
+                  var id = $(this).data('id');
+                  var c  = confirm('make comment seen');
+                  if (c) {
+                    $.ajax({
+                        type:'POST',
+                        url :'{{ route('mark.reject.seen') }}',
+                        data:{id:id},
+                        success:function(data){
+                            if (data.success == true) {
+                               location.reload();
+                            }
                         }
-                    }
-                });
-              }
-        });
-
+                    });
+                  }
+            });
+       });
 
 </script>
 

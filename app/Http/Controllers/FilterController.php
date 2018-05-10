@@ -24,7 +24,8 @@ class FilterController extends Controller
         $activities = Activity::where('marked_deleted', false)
 						            ->where(function($query)use($date,$operator) {
 						                $query->where('activity_owner', auth()->user()->id)
-						                      ->where('created_by',$operator, auth()->user()->id)
+                                              ->where('created_by',$operator, auth()->user()->id)
+                                              ->where('closed_by',null)
 						                      ->whereDate('due_date',$date->toDateString());
 						            })->orderBy('due_date', 'ASC')->get()->load('activityType', 'activitable');
         $view = view('filter.activity',compact('activities'))->render();

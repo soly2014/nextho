@@ -30,7 +30,8 @@
                         <div class="panel-title ellipsis" >Production Chart</div>
                     </div>
                     <div class="panel-body" id="ProductionChartDIV">
-                          <canvas id="myChart" style="height: 500px"></canvas>
+                          
+
                     </div>
                 </div>
             </div>
@@ -39,7 +40,6 @@
                     <div class="panel-heading">
                         <div class="panel-title ellipsis" >Meetings</div>
                     </div>
-                       <canvas id="Meeting" style="width: 550px; height:370px"></canvas>
                 </div>
             </div>
             <div class="col-sm-6">
@@ -47,7 +47,6 @@
                     <div class="panel-heading" id="CallsChartDIV">
                         <div class="panel-title ellipsis" >Calls</div>
                     </div>
-                       <canvas id="Call" style="width: 550px; height:370px"></canvas>
                 </div>
             </div>
             <div class="col-sm-6">
@@ -88,7 +87,13 @@
 <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css" href="{{ asset('public/plugins/jqueryui/css/jquery-ui.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('public/plugins/jqueryui/css/jquery-ui-timepicker.min.css') }}">
-
+<style type="text/css">
+#ProductionChartDIV, #MeetingsChartDIV, #CallsChartDIV {
+    height: 350px;
+    min-width: 200px;
+    max-width: 1500px;
+}
+</style>
 @stop
 
 @section('scripts')
@@ -99,7 +104,7 @@
 <script type="text/javascript" src="{{ asset('public/plugins/flot/jquery.flot.orderBars.js') }}"></script>
 <script type="text/javascript" src="{{ asset('public/plugins/flot/jquery.flot.resize.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('public/plugins/flot/jquery.flot.tooltip.min.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
 
 <script type="text/javascript" src="{{ asset('public/plugins/jqueryui/js/jquery-ui.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('public/plugins/jqueryui/js/jquery-ui-timepicker.min.js') }}"></script>
@@ -109,86 +114,241 @@
     $(function () {
  
 
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var chart = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'bar',
+           
+        // Achievment&Target Chart
+        var chart = Highcharts.chart('ProductionChartDIV', {
 
-        // The data for our dataset
-        data: {
-            labels: ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December","Total"],
-            datasets: [{
-                label: "Achievment",
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: {{ json_encode($data) }},
-            },{
-                label: "Target",
-                backgroundColor: 'rgb(0, 93, 164)',
-                borderColor: 'rgb(0, 93, 164)',
-                data:{{ json_encode($target) }},
-            }]
-        },
+            chart: {
+                type: 'column'
+            },
 
-        // Configuration options go here
-        options: {
-            responsible: false,
-            responsive: false,
-            maintainAspectRatio: false
+            title: {
+                text: 'Achievment && Target'
+            },
 
-        }
-    });
+            subtitle: {
+                text: ' '
+            },
+
+            legend: {
+                align: 'right',
+                verticalAlign: 'middle',
+                layout: 'vertical'
+            },
+
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mars','April', 'May', 'June','July', 'August', 'September','October', 'November', 'December','Total'],
+                labels: {
+                    x: -10
+                }
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                title: {
+                    text: 'Amount'
+                }
+            },
+
+            series: [{
+                name: 'Achievment',
+                data: {{ json_encode($data) }}
+            }, {
+                name: 'Target',
+                data: {{ json_encode($target) }}
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            align: 'center',
+                            verticalAlign: 'bottom',
+                            layout: 'horizontal'
+                        },
+                        yAxis: {
+                            labels: {
+                                align: 'left',
+                                x: 0,
+                                y: -5
+                            },
+                            title: {
+                                text: null
+                            }
+                        },
+                        subtitle: {
+                            text: null
+                        },
+                        credits: {
+                            enabled: false
+                        }
+                    }
+                }]
+            },
+            color: {
+                linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                stops: [
+                    [0, 'red'],
+                    [1, '#3366AA']
+                ]
+            }
+        });
 
 
 
-    var meeting = document.getElementById('Meeting').getContext('2d');
-    var chart = new Chart(meeting, {
-        // The type of chart we want to create
-        type: 'bar',
 
-        // The data for our dataset
-        data: {
-            labels: ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December","Total"],
-            datasets: [{
-                label: "Meetings",
-                backgroundColor: 'rgb(242, 210, 123)',
-                borderColor: 'rgb(242, 210, 123)',
-                data: {{ json_encode($meetings) }},
-            }]
-        },
+           
+        // Achievment&Target Chart
+        var chart = Highcharts.chart('MeetingsChartDIV', {
 
-        // Configuration options go here
-        options: {
-            responsible: false,
-            responsive: false,
-            maintainAspectRatio: false
-        }
-    });
+            chart: {
+                type: 'column'
+            },
+
+            title: {
+                text: 'Calls'
+            },
+
+            subtitle: {
+                text: ''
+            },
+
+            legend: {
+                align: 'right',
+                verticalAlign: 'middle',
+                layout: 'vertical'
+            },
+
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mars','April', 'May', 'June','July', 'August', 'September','October', 'November', 'December','Total'],
+                labels: {
+                    x: -10
+                }
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                title: {
+                    text: 'Amount'
+                }
+            },
+
+            series: [{
+                name: 'Calls',
+                data: {{ json_encode($calls) }}
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            align: 'center',
+                            verticalAlign: 'bottom',
+                            layout: 'horizontal'
+                        },
+                        yAxis: {
+                            labels: {
+                                align: 'left',
+                                x: 0,
+                                y: -5
+                            },
+                            title: {
+                                text: null
+                            }
+                        },
+                        subtitle: {
+                            text: null
+                        },
+                        credits: {
+                            enabled: false
+                        }
+                    }
+                }]
+            }
+        });
 
 
-    var call = document.getElementById('Call').getContext('2d');
-    var chart = new Chart(call, {
-        // The type of chart we want to create
-        type: 'bar',
 
-        // The data for our dataset
-        data: {
-            labels: ["January", "February", "March", "April", "May", "June", "July","August","September","October","November","December","Total"],
-            datasets: [{
-                label: "Calls",
-                backgroundColor: 'rgb(34, 155, 76)',
-                borderColor: 'rgb(34, 155, 76)',
-                data: {{ json_encode($calls) }},
-            }]
-        },
 
-        // Configuration options go here
-        options: {
-            responsible: false,
-            responsive: false,
-            maintainAspectRatio: false
-        }
-    });
+           
+        // Achievment&Target Chart
+        var chart = Highcharts.chart('CallsChartDIV', {
+
+            chart: {
+                type: 'column'
+            },
+
+            title: {
+                text: 'Meetings'
+            },
+
+            subtitle: {
+                text: ''
+            },
+
+            legend: {
+                align: 'right',
+                verticalAlign: 'middle',
+                layout: 'vertical'
+            },
+
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mars','April', 'May', 'June','July', 'August', 'September','October', 'November', 'December','Total'],
+                labels: {
+                    x: -10
+                }
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                title: {
+                    text: 'Amount'
+                }
+            },
+
+            series: [{
+                name: 'Meetings',
+                data: {{ json_encode($meetings) }}
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            align: 'center',
+                            verticalAlign: 'bottom',
+                            layout: 'horizontal'
+                        },
+                        yAxis: {
+                            labels: {
+                                align: 'left',
+                                x: 0,
+                                y: -5
+                            },
+                            title: {
+                                text: null
+                            }
+                        },
+                        subtitle: {
+                            text: null
+                        },
+                        credits: {
+                            enabled: false
+                        }
+                    }
+                }]
+            }
+        });
+
 
 
 
@@ -306,9 +466,9 @@
         @endif
 
 
-        $('#myChart').width($('#ProductionChartDIV').width()-20);//
-        $('#Meeting').width($('#MeetingsChartDIV').width()-20);//
-        $('#Call').width($('#CallsChartDIV').width()-20);//
+        // $('#ProductionChartDIV').width($('#ProductionChartDIVContainer').width()-20);//
+        // $('#MeetingsChartDIV').width($('#MeetingsChartDIVContainer').width()-20);//
+        // $('#CallsChartDIV').width($('#CallsChartDIVContainer').width()-20);//
         
  });
     

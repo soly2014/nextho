@@ -71,7 +71,7 @@ class User extends Authenticatable
     }
     
     public function soldProperties(){
-        return $this->hasMany('\App\Models\ClientProperty', 'created_by');
+        return $this->hasMany('\App\Models\ClientProperty', 'shared_with');
     }
     public function clientsActions(){
         return $this->hasMany('\App\Models\UserAction', 'created_by')->where('object_type', 'App\Models\Client');
