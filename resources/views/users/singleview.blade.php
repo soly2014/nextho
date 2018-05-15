@@ -59,97 +59,36 @@
                     </div>
                 </div>
                 @if($user->role_id == 2)
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="table-layout">
-                            <div class="col-xs-2 panel bgcolor-success">
-                                <div class="ico-bars fsize24 text-center"></div>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="panel-title ellipsis" >Production Chart</div>
+                                    </div>
+                                    <div class="panel-body" id="ProductionChartDIV">
+                                          
+
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-xs-10 panel">
-                                <div class="panel-body text-center">
-                                    <table class="semibold text-muted mb0 mt5 text-left table-prod" width="100%">
-                                        <tr>
-                                            <td>{{ number_format($sales_month, 0) }} EGP</td>
-                                            <td>-</td>
-                                            <td>{{ number_format($forecast_month, 0) }} EGP</td>
-                                            <td>=</td>
-                                            <td>{{ number_format(($forecast_month - $sales_month), 0) }} EGP</td>
-                                            <td><span class="text-primary text-right">Monthly</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ number_format($sales_quarter, 0) }} EGP</td>
-                                            <td>-</td>
-                                            <td>{{ number_format($forecast_quarter, 0) }} EGP</td>
-                                            <td>=</td>
-                                            <td>{{ number_format(($forecast_quarter - $sales_quarter), 0) }} EGP</td>
-                                            <td><span class="text-primary text-right">Quarterly</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ number_format($sales_year, 0) }} EGP</td>
-                                            <td>-</td>
-                                            <td>{{ number_format($forecast_year, 0) }} EGP</td>
-                                            <td>=</td>
-                                            <td>{{ number_format(($forecast_year - $sales_year), 0) }} EGP</td>
-                                            <td><span class="text-primary text-right">Yearly</span></td>
-                                        </tr>
-                                    </table>
-                                    <p class="semibold text-muted mb0 mt5">Total Sales</p>
+                            <div class="col-sm-6">
+                                <div class="panel panel-default" id="MeetingsChartDIV">
+                                    <div class="panel-heading">
+                                        <div class="panel-title ellipsis" >Meetings</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" id="CallsChartDIV">
+                                        <div class="panel-title ellipsis" >Calls</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
-                        <div class="table-layout">
-                            <div class="col-xs-2 panel bgcolor-success">
-                                <div class="ico-stats-up fsize24 text-center"></div>
-                            </div>
-                            <div class="col-xs-10 panel">
-                                <div class="panel-body text-center">
-                                    <table class="semibold text-muted mb0 mt5 text-left table-prod" width="100%">
-                                        <tr>
-                                            <td>{{ $monthly_actions }}</td>
-                                            <td>-</td>
-                                            <td>{{ $monthly_follow_ups }}</td>
-                                            <td>=</td>
-                                            <td>{{ $monthly_follow_ups - $monthly_actions }}</td>
-                                            <td><span class="text-primary text-right">Monthly</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ $quarterly_actions }}</td>
-                                            <td>-</td>
-                                            <td>{{ $monthly_follow_ups*3 }}</td>
-                                            <td>=</td>
-                                            <td>{{ ($monthly_follow_ups*3) - $quarterly_actions }}</td>
-                                            <td><span class="text-primary text-right">Quarterly</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ $yearly_actions }}</td>
-                                            <td>-</td>
-                                            <td>{{ $monthly_follow_ups*12 }}</td>
-                                            <td>=</td>
-                                            <td>{{ ($monthly_follow_ups*12) - $yearly_actions }}</td>
-                                            <td><span class="text-primary text-right">Yearly</span></td>
-                                        </tr>
-                                    </table>
-                                    <p class="semibold text-muted mb0 mt5">Follow Ups</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="table-layout fix-height">
-                            <div class="col-xs-4 panel bgcolor-teal">
-                                <div class="ico-users2 fsize24 text-center"></div>
-                            </div>
-                            <div class="col-xs-8 panel">
-                                <div class="panel-body text-center">
-                                    <h4 class="semibold nm">{{ $new_leads }}</h4>
-                                    <p class="semibold text-muted mb0 mt5">Reassigned Leads With No Action</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
                 @endif
             </div>
             <ul class="nav nav-tabs in-panel">
@@ -192,6 +131,13 @@
 @section('styles')
 
 <link rel="stylesheet" type="text/css" href="{{ asset('public/plugins/datatables/css/jquery.datatables.min.css') }}">
+<style type="text/css">
+    #ProductionChartDIV, #MeetingsChartDIV, #CallsChartDIV {
+        height: 350px;
+        min-width: 200px;
+        max-width: 1500px;
+    }
+</style>
 
 @stop
 
@@ -203,5 +149,252 @@
 <script type="text/javascript" src="{{ asset('public/plugins/datatables/js/jquery.datatables-custom.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('public/javascript/tables/datatable.js') }}"></script>
 <script type="text/javascript" src="{{ asset('public/javascript/utils/users.js') }}"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script type="text/javascript">
+    
+    $(document).ready(function(){
 
+
+           
+            // Achievment&Target Chart
+            var chart = Highcharts.chart('ProductionChartDIV', {
+
+                chart: {
+                    type: 'column'
+                },
+
+                title: {
+                    text: 'Achievment && Target'
+                },
+
+                subtitle: {
+                    text: ' '
+                },
+
+                legend: {
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    layout: 'vertical'
+                },
+
+                xAxis: {
+                    categories: ['Jan', 'Feb', 'Mars','April', 'May', 'June','July', 'August', 'September','October', 'November', 'December','Total'],
+                    labels: {
+                        x: -10
+                    }
+                },
+
+                yAxis: {
+                    allowDecimals: false,
+                    title: {
+                        text: 'Amount'
+                    }
+                },
+
+                series: [{
+                    name: 'Achievment',
+                    data: {{ json_encode($data) }}
+                }, {
+                    name: 'Target',
+                    data: {{ json_encode($target) }}
+                }],
+
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                align: 'center',
+                                verticalAlign: 'bottom',
+                                layout: 'horizontal'
+                            },
+                            yAxis: {
+                                labels: {
+                                    align: 'left',
+                                    x: 0,
+                                    y: -5
+                                },
+                                title: {
+                                    text: null
+                                }
+                            },
+                            subtitle: {
+                                text: null
+                            },
+                            credits: {
+                                enabled: false
+                            }
+                        }
+                    }]
+                },
+                color: {
+                    linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                    stops: [
+                        [0, 'red'],
+                        [1, '#3366AA']
+                    ]
+                }
+            });
+
+
+
+
+               
+            // Achievment&Target Chart
+            var chart = Highcharts.chart('MeetingsChartDIV', {
+
+                chart: {
+                    type: 'column'
+                },
+
+                title: {
+                    text: 'Calls'
+                },
+
+                subtitle: {
+                    text: ''
+                },
+
+                legend: {
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    layout: 'vertical'
+                },
+
+                xAxis: {
+                    categories: ['Jan', 'Feb', 'Mars','April', 'May', 'June','July', 'August', 'September','October', 'November', 'December','Total'],
+                    labels: {
+                        x: -10
+                    }
+                },
+
+                yAxis: {
+                    allowDecimals: false,
+                    title: {
+                        text: 'Amount'
+                    }
+                },
+
+                series: [{
+                    name: 'Calls',
+                    data: {{ json_encode($calls) }}
+                }],
+
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                align: 'center',
+                                verticalAlign: 'bottom',
+                                layout: 'horizontal'
+                            },
+                            yAxis: {
+                                labels: {
+                                    align: 'left',
+                                    x: 0,
+                                    y: -5
+                                },
+                                title: {
+                                    text: null
+                                }
+                            },
+                            subtitle: {
+                                text: null
+                            },
+                            credits: {
+                                enabled: false
+                            }
+                        }
+                    }]
+                }
+            });
+
+
+
+
+               
+            // Achievment&Target Chart
+            var chart = Highcharts.chart('CallsChartDIV', {
+
+                chart: {
+                    type: 'column'
+                },
+
+                title: {
+                    text: 'Meetings'
+                },
+
+                subtitle: {
+                    text: ''
+                },
+
+                legend: {
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    layout: 'vertical'
+                },
+
+                xAxis: {
+                    categories: ['Jan', 'Feb', 'Mars','April', 'May', 'June','July', 'August', 'September','October', 'November', 'December','Total'],
+                    labels: {
+                        x: -10
+                    }
+                },
+
+                yAxis: {
+                    allowDecimals: false,
+                    title: {
+                        text: 'Amount'
+                    }
+                },
+
+                series: [{
+                    name: 'Meetings',
+                    data: {{ json_encode($meetings) }}
+                }],
+
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                align: 'center',
+                                verticalAlign: 'bottom',
+                                layout: 'horizontal'
+                            },
+                            yAxis: {
+                                labels: {
+                                    align: 'left',
+                                    x: 0,
+                                    y: -5
+                                },
+                                title: {
+                                    text: null
+                                }
+                            },
+                            subtitle: {
+                                text: null
+                            },
+                            credits: {
+                                enabled: false
+                            }
+                        }
+                    }]
+                }
+            });
+
+
+
+
+
+    });
+
+</script>
 @stop

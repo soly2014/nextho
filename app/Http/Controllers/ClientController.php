@@ -275,26 +275,30 @@ class ClientController extends Controller {
 
 		$this->validate($request,
 							 array(
-								 'name'                  => 'required|regex:/^[a-zA-Z]+$/u',
-								 'last_name'             => 'regex:/^[a-zA-Z]+$/u',
+								 'name'                  => 'required|regex:/^[a-zA-Z ]+$/u',
+								 'last_name'             => 'regex:/^[a-zA-Z ]+$/u',
+								 'company'               => 'regex:/^[a-zA-Z ]+$/u',
+								 'work_title'            => 'regex:/^[a-zA-Z ]+$/u',
 								 'phone'                 => 'required_without_all:mobile,mobile_two,international_number',
 								 'mobile_two'            => 'required_without_all:mobile,phone,international_number|regex:/(01)[0-9]{9}/',
 								 'international_number'  => 'required_without_all:mobile,mobile_two,phone',
 								 'mobile'                => 'required_without_all:phone,international_number,mobile_two|regex:/(01)[0-9]{9}/',
-								 'description'      => 'required|max:5120',
-								 'secondary_email'  =>  $request->secondary_email ? 'email': '',
-								 'email'            =>  $request->email ? 'email': '',
-								 'assign_to'        => 'required_if:assign_leads,1',
-								 'cat'		    	=> 'required|not_in:'.$select,
-								 'lead_source'		=> 'required|not_in:'.'17',
-								 'lead_status'		=> 'required|not_in:'.'9',
-								 'interested_district'	=> 'required|not_in:'.$select,
-								 'interested_type'    	=> 'required|not_in:'.'10',
-								 'developer_id'         => 'required',
-								 'project_id'           => 'required',
-								 'new_mobile_one'            => $request->new_mobile_one ? 'regex:/(01)[0-9]{9}/' : '',
-								 'new_mobile_two'            => $request->new_mobile_two ? 'regex:/(01)[0-9]{9}/' : '',
-								 'new_email'                 => $request->email ? 'email' : ''
+								 'description'           => 'required|max:5120',
+								 'secondary_email'       =>  $request->secondary_email ? 'email': '',
+								 'email'                 =>  $request->email ? 'email': '',
+								 'assign_to'             => 'required_if:assign_leads,1',
+								 'cat'		    	     => 'required|not_in:'.$select,
+								 'lead_source'		     => 'required|not_in:'.'17',
+								 'lead_status'		     => 'required|not_in:'.'9',
+								 'interested_district'	 => 'required|not_in:'.$select,
+								 'interested_type'    	 => 'required|not_in:'.'10',
+								 'developer_id'          => 'required',
+								 'project_id'            => 'required',
+								 'new_mobile_one'        => $request->new_mobile_one ? 'regex:/(01)[0-9]{9}/' : '',
+								 'new_mobile_two'        => $request->new_mobile_two ? 'regex:/(01)[0-9]{9}/' : '',
+								 'new_email'             => $request->new_email ? 'email' : '',
+								 'new_first_name'        => $request->new_first_name ? 'regex:/^[a-zA-Z ]+$/u' : '',
+								 'new_last_name'         => $request->new_last_name ? 'regex:/^[a-zA-Z ]+$/u' : ''
 
 							 ), $messages
 						);
@@ -464,7 +468,6 @@ class ClientController extends Controller {
 		} else {
 			$client = auth()->user()->clientsAssigned()->where('id', $id)->where('marked_deleted', 0)->where('is_customer', 0)->first();
 		}
-
 
 		if($client){
 
@@ -670,23 +673,30 @@ class ClientController extends Controller {
 
 		$this->validate($request,
 							 array(
-								 'name'             => 'required',
+								 'name'                  => 'required|regex:/^[a-zA-Z ]+$/u',
+								 'work_title'            => 'regex:/^[a-zA-Z ]+$/u',
+								 'country'               => 'regex:/^[a-zA-Z ]+$/u',
+								 'last_name'             => 'regex:/^[a-zA-Z ]+$/u',
+								 'company'               => 'regex:/^[a-zA-Z ]+$/u',								 
 								 'phone'                 => 'required_without_all:mobile,mobile_two,international_number',
 								 'mobile_two'            => 'required_without_all:mobile,phone,international_number|regex:/(01)[0-9]{9}/',
 								 'international_number'  => 'required_without_all:mobile,mobile_two,phone',
 								 'mobile'                => 'required_without_all:phone,international_number,mobile_two|regex:/(01)[0-9]{9}/',
-								 'description'      => 'required|max:5120',
-								 'secondary_email'  => $request->secondary_email ? 'email': '',
-								 'email'            => $request->email ? 'email': '',
-								 'assign_to'        => 'required_if:assign_leads,1',
-								 'cat'		    	=> 'required|not_in:'.$select,
-								 'lead_source'		=> 'required|not_in:'.'17',
-								 'lead_status'		=> 'required|not_in:'.'9',
+								 'description'           => auth()->user()->role_id != '2' ? 'required|max:5120' : '',
+								 'secondary_email'       => $request->secondary_email ? 'email': '',
+								 'email'                 => $request->email ? 'email': '',
+								 'assign_to'             => 'required_if:assign_leads,1',
+								 'cat'		    	     => 'required|not_in:'.$select,
+								 'lead_status'		     => 'required|not_in:'.'9',
 								 'interested_district'	=> 'required|not_in:'.$select,
-								 'interested_type'	         => 'required|not_in:'.'10',
-								 'new_mobile_one'            => $request->new_mobile_one ? 'regex:/(01)[0-9]{9}/' : '',
-								 'new_mobile_two'            => $request->new_mobile_two ? 'regex:/(01)[0-9]{9}/' : '',
-								 'new_email'                 => $request->email ? 'email' : ''
+								 'interested_type'	    => 'required|not_in:'.'10',
+								 'developer_id'         => 'required',
+								 'project_id'           => 'required',								 
+								 'new_mobile_one'       => $request->new_mobile_one ? 'regex:/(01)[0-9]{9}/' : '',
+								 'new_mobile_two'       => $request->new_mobile_two ? 'regex:/(01)[0-9]{9}/' : '',
+								 'new_email'             => $request->new_email ? 'email' : '',
+								 'new_first_name'        => $request->new_first_name ? 'regex:/^[a-zA-Z ]+$/u' : '',
+								 'new_last_name'         => $request->new_last_name ? 'regex:/^[a-zA-Z ]+$/u' : ''
 							 
 							 ), $messages
 							);
@@ -734,7 +744,6 @@ class ClientController extends Controller {
 				$last_name              = $request->last_name ? : '';
 				$fax                    = $request->fax ? : '';
 				$lead_status            = $request->lead_status;
-				$lead_source            = $request->lead_source;
 				$secondary_email        = $request->secondary_email ? : '';
 				$street                 = $request->street ? : '';
 				$state                  = $request->state ? : '';
@@ -765,7 +774,6 @@ class ClientController extends Controller {
 					'last_name'         => $last_name,
 					'fax'               => $fax,
 					'client_status_id'  => $lead_status,
-					'client_source_id'  => $lead_source,
 					'secondary_email'   => $secondary_email,
 					'interested_type'   => $interested_type,
 					'interested_district' =>$interested_district,
@@ -781,18 +789,33 @@ class ClientController extends Controller {
 					'cat'				=> $cat
 				]);
 
+				if ($client->sub()->first()) {
+					$client->sub()->first()->update([
 
-				$client->sub()->update([
+						  'title'                => $request->new_title,
+						  'first_name'           => $request->new_first_name,
+						  'last_name'            => $request->new_last_name,
+						  'phone'                => $request->new_phone,
+						  'mobile_one'           => $request->new_mobile_one,
+						  'mobile_two'           => $request->new_mobie_two,
+						  'international_number' => $request->new_international_number,
+						  'email'                => $request->new_email,
+					]);
+				} else {
+					$client->sub()->create([
 
-					  'title'                => $request->new_title,
-					  'first_name'           => $request->new_first_name,
-					  'last_name'            => $request->new_last_name,
-					  'phone'                => $request->new_phone,
-					  'mobile_one'           => $request->new_mobile_one,
-					  'mobile_two'            => $request->new_mobie_two,
-					  'international_number' => $request->new_international_number,
-					  'email'                => $request->new_email,
-				]);
+						  'title'                => $request->new_title,
+						  'first_name'           => $request->new_first_name,
+						  'last_name'            => $request->new_last_name,
+						  'phone'                => $request->new_phone,
+						  'mobile_one'           => $request->new_mobile_one,
+						  'mobile_two'           => $request->new_mobie_two,
+						  'international_number' => $request->new_international_number,
+						  'email'                => $request->new_email,
+					]);
+				}
+				
+
 
 				// delete old developers & projects
                 $client->developers()->sync($request->developer_id);

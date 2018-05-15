@@ -43,7 +43,12 @@ class NewClientController extends Controller
         $new_count = auth()->user()->clientsAssigned()->where('newly_assigned', true)->where('marked_deleted', false)->where('is_customer', false)->count();
         $diff = $new_count - $request->num;
 
-        return response()->json(['diff'=>$diff,'new_count'=>$new_count]);
+        if ($diff > 1) {
+            return response()->json(['success'=> true,'diff'=>$diff,'new_count'=>$new_count]);
+        } else {
+            return response()->json(['success'=> false]);
+        }
+        
     }
 
 }

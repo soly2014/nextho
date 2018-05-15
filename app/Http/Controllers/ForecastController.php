@@ -16,7 +16,7 @@ class ForecastController extends Controller {
      */
     public function getAll(){
 
-        $forecasts = Forecast::select(DB::Raw('sum(amount) as sum'),'month','year')->groupBy('month','year')->latest()->get();
+        $forecasts = Forecast::select(DB::Raw('sum(amount) as sum'),'month','year')->groupBy('month','year')->get();
 
         PageTitle::add('View All Forecasts');
         return view('forecasts.view', array(
@@ -32,7 +32,7 @@ class ForecastController extends Controller {
             ]),
             'forecasts' => $forecasts
         ));
-    }
+    }//6576696174
     /**
      * [getCreate description]
      * @return [type] [description]

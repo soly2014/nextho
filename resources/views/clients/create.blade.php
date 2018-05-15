@@ -217,19 +217,6 @@
                             </div>
                         </div>
 
-                        @if($errors->has('fax'))
-                        <div class="form-group has-error">
-                        @else
-                        <div class="form-group">
-                        @endif
-                            <label class="col-sm-3 control-label" for="fax">Fax:</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="fax" id="fax"{{ (old('fax') ? '  value="'.e(old('fax')).'"' : '') }}>
-                                @if($errors->has('fax'))
-                                <div class="help-block">{{ $errors->first('fax') }}</div>
-                                @endif
-                            </div>
-                        </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="lead_status">Lead Status: <span class="text-danger">*</span></label>
                             <div class="col-sm-9">

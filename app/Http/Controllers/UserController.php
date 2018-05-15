@@ -115,82 +115,59 @@ class UserController extends Controller {
 
         PageTitle::add(('View "'.$user->username.'" Details'));
         if($user){
+            
+
+
             $Today      = Carbon::today();
-            $mothly_forecast = $Quarter_forecast = $yearly_forecasts = $mothly_sales = $Quarter_sales = $yearly_sales = $actions_month = $actions_quarter = $actions_yearly = $new_leads = 0;
-            if($user->role_id == 2){
-                 $year = $Today->year;
+            $year = $Today->year;
+            $soldProperties = $user->soldProperties()->selectRaw('sum(price) as aggregate, month')->where('year', $year)->where('approved', true)->groupBy('month', 'year')->orderBy('month', 'ASC')->pluck('aggregate', 'month');
 
-                $soldProperties = $user->soldProperties()->selectRaw('sum(price) as aggregate, month')->where('year', $year)->where('approved', true)->groupBy('month', 'year')->orderBy('month', 'ASC')->pluck('aggregate', 'month')->toArray();
+            $forecasts = Forecast::where('marked_deleted', false)->where('year', $year)->orderBy('month')->pluck('amount', 'month');
 
-                $forecasts = Forecast::where('marked_deleted', false)->where('year', $year)->orderBy('month')->pluck('amount', 'month')->toArray();
+            //dd($soldProperties[1]);
 
-                ////////////////////////////////////////////////////
+            $this_month = $Today->month;
 
-                //Quarterly States
-                $Quarter_first_day = $Today->firstOfQuarter()->month - 1;
-
-                $Quarter_sales      = 0;
-                $Quarter_forecast   = 0;
-                for($i=1; $i<($Quarter_first_day+3); $i++){
-                    //var_dump($i);
-                    if(isset($forecasts[$i])){
-                        if(isset($soldProperties[$i])){
-                            $Quarter_sales      += $soldProperties[$i];
-                        }
-                        $Quarter_forecast   += $forecasts[$i];
+            $target = [];
+            $data   = [];
+            $calls = []; 
+            $meetings = [];                       
+            for($i =1 ; $i <= 12; $i++){
+                    if(isset($soldProperties[($i)]) && array_key_exists(($i), $soldProperties)){
+                        $data[]   = $soldProperties[($i)];
+                    } else {
+                        $data[]   = 0;
                     }
-                }
-                //dd($Quarter_forecast);
-                //yearly Stats
-                $yearly_sales       = array_sum($soldProperties);
-                $yearly_forecasts   = array_sum($forecasts);
-
-                $Today      = Carbon::today();
-
-                $month = $Today->month;
-                $mothly_forecast    = 0;
-                $mothly_sales       = 0;
-                if(isset($forecasts[$month]) && $forecasts[$month]){
-                    $mothly_forecast = $forecasts[$month];
-                }
-                if(isset($soldProperties[$month]) && $soldProperties[$month]){
-                    $mothly_sales = $soldProperties[$month];
-                }
-                //New Leads
-                $new_leads = $user->clientsAssigned()->where('newly_assigned', true)->where('marked_deleted', false)->where('is_customer', false)->count();
-                //Monthly Follow ups
-                $Today      = Carbon::today();
-                $first_day  = $Today->startOfMonth();
-
-                $Today      = Carbon::today();
-                $last_day   = $Today->endOfMonth();
-
-                $actions_month = 20;//$user->clientsActions()->whereBetween('date', array($first_day, $last_day))->groupBy('date', 'client_id')->get()->count();
-
-                /////////////////////
-
-                //Quarterly Follow Ups
-                $Today              = Carbon::today();
-                $quarter_start_day  = $Today->firstOfQuarter();
-
-                $Today              = Carbon::today();
-                $quarter_end_day    = $Today->lastOfQuarter();
-
-                $actions_quarter = 30;//$user->clientsActions()->whereBetween('date', array($quarter_start_day, $quarter_end_day))->groupBy('date', 'client_id')->get()->count();
-
-                /////////////////////
-
-                //Yearly Follow Ups
-                $Today              = Carbon::today();
-                $year_start_day  = $Today->firstOfYear();
-
-                $Today              = Carbon::today();
-                $year_end_day    = $Today->lastOfYear();
-
-                $actions_yearly = 40;//$user->clientsActions()->whereBetween('date', array($year_start_day, $year_end_day))->groupBy('date', 'client_id')->get()->count();
-
+                    if(\App\Models\Forecast::where(['month'=>$i,'year'=>$Today->year,'agent_id'=>$user->id])->first()){
+                        $target[]   = \App\Models\Forecast::where(['month'=>$i,'year'=>$Today->year,'agent_id'=>$user->id])->sum('amount');
+                    } else {
+                        $target[]   = 0;
+                    }
+                    // get count calls
+                    if ($count = $user->notesCreated()->whereMonth('created_at',$i)->whereYear('created_at',$Today->year)->where('activity_type',3)->count()) {
+                        $calls[] = $count;
+                    }else {
+                        $calls[] = 0;
+                    }
+                    // get count calls
+                    if ($count = $user->notesCreated()->whereMonth('created_at',$i)->whereYear('created_at',$Today->year)->where('activity_type',4)->count()) {
+                        $meetings[] = $count;
+                    }else {
+                        $meetings[] = 0;
+                    }
+                    
 
             }
+
+                $target   = array_add($target,12,array_sum($target)); 
+                $data     = array_add($data,12,array_sum($data)); 
+                $calls    = array_add($calls,12,array_sum($calls)); 
+                $meetings = array_add($meetings,12,array_sum($meetings)); 
+
+
+
+
+           
 
             $no_leads 	= Client::with('userDeleted', 'userAssigned', 'district')->where('is_customer', false)->where('newly_assigned', true)->where('assigned_to', $id)->paginate(25);
             
@@ -210,17 +187,21 @@ class UserController extends Controller {
                 'customers'         => $user->clientsAssigned()->where('is_customer', true)->orderBy('customer_date', 'asc')->get()->load('propertiesCount', 'propertiesAmount'),
                 'open_activities'   => $user->activities()->whereNotIn('status', [4])->orderBy('due_date', 'asc')->get()->load('clientBelongsTo', 'activityType', 'activityStatus'),
                 'closed_activitied' => $user->activities()->where('status', 4)->get(),
-                'forecast_month'        => $mothly_forecast,
-                'forecast_quarter'      => $Quarter_forecast,
-                'forecast_year'         => $yearly_forecasts,
-                'sales_month'           => $mothly_sales,
-                'sales_quarter'         => $Quarter_sales,
-                'sales_year'            => $yearly_sales,
-                'monthly_follow_ups'    => 420,
-                'monthly_actions'       => $actions_month,
-                'quarterly_actions'     => $actions_quarter,
-                'yearly_actions'        => $actions_yearly,
-                'new_leads'             => $new_leads,
+                // 'forecast_month'        => $mothly_forecast,
+                // 'forecast_quarter'      => $Quarter_forecast,
+                // 'forecast_year'         => $yearly_forecasts,
+                // 'sales_month'           => $mothly_sales,
+                // 'sales_quarter'         => $Quarter_sales,
+                // 'sales_year'            => $yearly_sales,
+                // 'monthly_follow_ups'    => 420,
+                // 'monthly_actions'       => $actions_month,
+                // 'quarterly_actions'     => $actions_quarter,
+                // 'yearly_actions'        => $actions_yearly,
+               // 'new_leads'             => $new_leads,
+                'target'                => $target,
+                'data'                 => $data,
+                'calls'                => $calls,
+                'meetings'             => $meetings,
                 'no_action_lead'        => $no_leads
             ));
 

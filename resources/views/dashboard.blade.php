@@ -10,7 +10,7 @@
     @endif
 
     @if(auth()->user()->role_id == '3')
-    <li class="active" style="position: relative;padding: 5px;"><i class="fa fa-thumbs-o-down" style="font-size: 30px;color:#005da4;"></i><span class="badge" style="position: absolute;left: 0;bottom: 0;background-color: red;">
+    <li class="active" style="position: relative;padding: 5px;"><i class="fa fa-thumbs-o-down" style="font-size: 30px;color:#005da4;"></i><span id="countBadge" class="badge" style="position: absolute;left: 0;bottom: 0;background-color: red;">
     {{ \App\Models\Client::where('newly_assigned',1)->count() }}</span></li>
     @endif
 
@@ -449,6 +449,23 @@
             }
         });
 
+        (function ($) {
+            $.extend({
+                playSound: function () {
+                    return $(
+                           '<audio class="sound-player" autoplay="autoplay" style="display:none;">'
+                             + '<source src="' + arguments[0] + '" />'
+                             + '<embed src="' + arguments[0] + '" hidden="true" autostart="true" loop="false"/>'
+                           + '</audio>'
+                         ).appendTo('body');
+                },
+                stopSound: function () {
+                    $(".sound-player").remove();
+                }
+            });
+        })(jQuery);
+
+
         @if(auth()->user()->role_id == '2')
         setInterval(function() {
             $.ajax({
@@ -456,13 +473,19 @@
                 data:{num:{{ $new_leads }} },
                 url:'{{ route('count_new_leads') }}',
                 success:function(data){
-                    console.log(data.diff,data.new_count);
+                    if (data.success) {
+                         $('#countBadge').val(data.new_count);
+                         $.playSound("http://www.noiseaddicts.com/samples_1w72b820/3724.mp3");
+                    } else {
+
+                    }
+                    console.log(data);
                 },
                 error:function(error){
                     //alert(error);
                 }
             });
-        },2000);
+        },5000);
         @endif
 
 

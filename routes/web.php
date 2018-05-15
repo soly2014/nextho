@@ -1174,6 +1174,6 @@ Route::get('change-password','UserController@changePassword')->name('change.pass
 Route::post('change-password','UserController@postChangePassword')->name('post.change.password');//
 
 
-Route::get('count-new-leads','NewClientController@]')->name('count_new_leads');
+Route::get('count-new-leads','NewClientController@countNewLeads')->name('count_new_leads');
 
 });

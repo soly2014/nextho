@@ -139,12 +139,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label" for="fax">Fax:</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="fax" id="fax" value="{{ $client->fax }}">
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-sm-3 control-label" for="lead_status">Lead Status:</label>
                             <div class="col-sm-9">
                                 <select name="lead_status" class="form-control input-sm">
@@ -154,7 +148,7 @@
                                 </select>                                
                             </div>
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label class="col-sm-3 control-label" for="lead_source">Lead Source:</label>
                             <div class="col-sm-9">
                                 <select name="lead_source" class="form-control input-sm">
@@ -163,7 +157,7 @@
                                     @endforeach
                                 </select>                                                                
                             </div>
-                        </div>
+                        </div> --}}
 
 
                         <!-- MY EDIT START -->
@@ -229,10 +223,6 @@
                     </div>
                 </div>
                 <hr class="dotted">
-
-
-
-
 
 
 
@@ -317,7 +307,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="description">Description <span class="text-danger">*</span>:</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" rows="4" cols="5" name="description" id="description" data-parsley-maxlength="5120" data-parsley-required @if(auth()->user()->role_id == '2') disabled="disabled" @endif>{{ $client->description }}</textarea>
+                                <textarea class="form-control" rows="4" cols="5" name="description" id="description" data-parsley-maxlength="5120" data-parsley-required @if(auth()->user()->role_id == '2') readonly="readonly" @endif>{{ $client->description }}</textarea>
                             </div>
                         </div>
                     </div>

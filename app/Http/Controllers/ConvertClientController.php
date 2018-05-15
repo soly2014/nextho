@@ -69,7 +69,7 @@ class ConvertClientController extends Controller
 									  'location' => 'required_if:option,resale',
 									  'street' => 'required',
 									  'state' => 'required',
-									  'country' => 'required',
+									  'country' => 'required|regex:/^[a-zA-Z ]+$/u',
 									  'city' => 'required',
 					        ]);
 

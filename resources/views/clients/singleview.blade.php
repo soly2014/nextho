@@ -73,30 +73,30 @@ $lead = $object;
                     <div class="col-md-6">
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Name:</label>
-                            <label class="col-sm-9 control-label control-label-value">{{ $lead->title  }} {{ $lead->name }}</label>
+                            <label class="col-sm-3 control-label">Full Name:</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ $lead->title  }} {{ $lead->name.' '.$lead->last_name }}</label>
                         </div>
 
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Company:</label>
-                            <label class="col-sm-9 control-label control-label-value">{{ $lead->company ?? '======' }}</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ $lead->company ? $lead->company : '======' }}</label>
                         </div>
 
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Title:</label>
-                            <label class="col-sm-9 control-label control-label-value">{{ $lead->work_title != '' ? $lead->work_title : '========'}}</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ $lead->work_title != '' ? $lead->work_title : '======'}}</label>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Phone:</label>
-                            <label class="col-sm-9 control-label control-label-value">{{ $lead->Phone ?? '======'}}</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ $lead->Phone ? $lead->Phone : '======'}}</label>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Mobile:</label>
-                            <label class="col-sm-9 control-label control-label-value">{{ $lead->mobile }}</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ $lead->mobile ? $lead->mobile : '======'}}{{  $lead->mobile_two ? ' , '.$lead->mobile_two : '' }} {{  $lead->international_number ? ' , '.$lead->international_number : '' }}</label>
                         </div>
 
                         <div class="form-group">
@@ -108,50 +108,12 @@ $lead = $object;
                             <label class="col-sm-9 control-label control-label-value">{{ implode($lead->projects()->pluck('name')->toArray(),'|') }}</label>
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Email:</label>
-                            <label class="col-sm-9 control-label control-label-value"><a href="mailto:{{ $lead->email }}">{{ $lead->email }}</a></label>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-5">
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">Email</label>
-                                    <div class="col-sm-9">
-                                        <span class="checkbox custom-checkbox custom-checkbox-teal">
-                                            <input type="checkbox" name="customcheckbox2" id="customcheckbox2" <?php if($lead->opt_out == 1) { echo 'checked="checked"'; } ?> disabled/>
-                                            <label for="customcheckbox2">&nbsp;&nbsp;Opt. Out</label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            @if($view_all)
-                            <div class="col-sm-7">
-                                <div class="form-group">
-                                    <label class="col-sm-5 control-label">Assigned To:</label>
-                                    <label class="col-sm-7 control-label control-label-value">{{ $lead->userAssigned->username }}</label>
-                                    <label class="col-sm-5 control-label">Created By:</label>
-                                    <label class="col-sm-7 control-label control-label-value">{{ $lead->userCreated->username }}</label>
-                                </div>
-                            </div>
-                            @endif
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-6 control-label"><a data-toggle="collapse" data-parent="#info" href="#details"><i class="ico-bubble-dots4 mr10"></i>Expand Extra Lead Information</a></label>
-
-                        </div>
                     </div>
                     <div class="col-md-6">
-                        @if($lead->last_name != '')
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Last Name:</label>
-                            <label class="col-sm-9 control-label control-label-value">{{ $lead->last_name }}</label>
-                        </div>
-                        @endif
                         @if($lead->fax != '')
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Fax:</label>
-                            <label class="col-sm-9 control-label control-label-value">{{ $lead->fax }}</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ $lead->fax ? $lead->fax : '======'}}</label>
                         </div>
                         @endif
                         <div class="form-group">
@@ -173,55 +135,104 @@ $lead = $object;
                             <label class="col-sm-3 control-label">Category:</label>
                             <label class="col-sm-9 control-label control-label-value">{{ $lead->cat }}</label>
                         </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="interested_district">District Interested In:</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ $lead->district->label }}</label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="interested_type">Type Interested In:</label>
+                            <label class="col-sm-9 control-label control-label-value">{{ $lead->type->label }}</label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Email:</label>
+                            <label class="col-sm-9 control-label control-label-value"><a href="mailto:{{----}}">{{ $lead->email ? $lead->email : '======' }} {{  $lead->secondary_email ? ' , '.$lead->secondary_email : '' }}</a></label>
+                        </div>
+
+                    </div>
+
+                    <div class="clearfix"></div>
+                      
                         <div class="row">
                             <div class="col-sm-6">
+                                @if($view_all)
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Assigned To:</label>
+                                        <label class="col-sm-9 control-label control-label-value">{{ $lead->userAssigned->username }}</label>
+                                    </div>
+                                @endif
                                 <div class="form-group">
-                                    <label class="col-sm-12 control-label text-left" for="interested_district">District Interested In:</label>
-                                    <label class="col-sm-12 control-label control-label-value">{{ $lead->district->label }}</label>
+                                    <label class="col-sm-6 control-label"><a data-toggle="collapse" data-parent="#info" href="#details"><i class="ico-bubble-dots4 mr10"></i>Expand Extra Lead Information</a></label>
+
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="col-sm-12 control-label text-left" for="interested_type">Property Type Interested In:</label>
-                                    <label class="col-sm-12 control-label control-label-value">{{ $lead->type->label }}</label>
-                                </div>
+                                @if($view_all)
+                                    <div class="form-group">    
+                                        <label class="col-sm-3 control-label">Created By:</label>
+                                        <label class="col-sm-9 control-label control-label-value">{{ $lead->userCreated->username }}</label>
+                                    </div>
+                                @endif
                             </div>
                         </div>
-                    </div>
                 </div>
                 <div id="details" class="panel-collapse collapse">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Street:</label>
-                                <label class="col-sm-9 control-label control-label-value">{{ $lead->street }}</label>
+                                <label class="col-sm-9 control-label control-label-value">{{ $lead->street  ? $lead->street : '======'}}</label>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">State:</label>
-                                <label class="col-sm-9 control-label control-label-value">{{ $lead->state }}</label>
+                                <label class="col-sm-9 control-label control-label-value">{{ $lead->state  ? $lead->state : '======'}}</label>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Country:</label>
-                                <label class="col-sm-9 control-label control-label-value">{{ $lead->country }}</label>
+                                <label class="col-sm-9 control-label control-label-value">{{ $lead->country  ? $lead->country : '======'}}</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">City:</label>
-                                <label class="col-sm-9 control-label control-label-value">{{ $lead->city }}</label>
+                                <label class="col-sm-9 control-label control-label-value">{{ $lead->city  ? $lead->city : '======'}}</label>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Zip Code:</label>
-                                <label class="col-sm-9 control-label control-label-value">{{ ($lead->zip_code != 0) ? $lead->zip_code : ''}}</label>
+                                <label class="col-sm-9 control-label control-label-value">{{ ($lead->zip_code != 0) ? $lead->zip_code : '======'}}</label>
+                            </div>
+                        </div>
+                    </div><hr>
+
+                    @if($sub = $lead->sub()->first())
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Full Name:</label>
+                                <label class="col-sm-9 control-label control-label-value">{{ $sub->title.' ' }}{{ $sub->first_name  ? $sub->first_name : '======'}}{{ $sub->last_name  ? ' '.$sub->last_name : '======'}}</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Numbers:</label>
+                                <label class="col-sm-9 control-label control-label-value">{{ $sub->mobile_one ? $sub->mobile_one : '======'}}{{  $sub->mobile_two ? ' , '.$sub->mobile_two : '' }} {{  $sub->international_number ? ' , '.$sub->international_number : '' }}{{  $sub->phone ? ' , '.$sub->phone : '' }}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Email:</label>
+                                <label class="col-sm-9 control-label control-label-value">{{ $sub->email  ? $sub->email : '======'}}</label>
                             </div>
                         </div>
                     </div>
+                    @endif
+
                     <hr>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Description:</label>
-                                <label class="col-sm-9 control-label control-label-value">{{ e($lead->description) }}</label>
+                                <label class="col-sm-9 control-label control-label-value">{{ e($lead->description) ? $lead->description : '======' }}</label>
                             </div>
                         </div>
                     </div>

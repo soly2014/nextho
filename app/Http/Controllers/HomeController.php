@@ -58,7 +58,8 @@ class HomeController extends Controller {
  * check if user is Admin
  */
 if(auth()->user()->role_id != 1){
-
+            
+            $Today      = Carbon::today();
 			$soldProperties = auth()->user()->soldProperties()->selectRaw('sum(price) as aggregate, month')->where('year', $year)->where('approved', true)->groupBy('month', 'year')->orderBy('month', 'ASC')->pluck('aggregate', 'month');
 
 			$forecasts = Forecast::where('marked_deleted', false)->where('year', $year)->orderBy('month')->pluck('amount', 'month');
