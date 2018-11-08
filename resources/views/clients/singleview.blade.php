@@ -51,8 +51,11 @@ $lead = $object;
                 <h3 class="panel-title"><i class="ico-user22 mr10"></i>"{{ $lead->name.' '.$lead->last_name }}" Details {{ $lead->newly_assigned }}</h3>
                 <div class="panel-toolbar text-right">
                     <div class="btn-group">
+                        @if(auth()->user()->role_id != '2') 
                         <a href="{{ route('add.action', $lead->id) }}" class="btn btn-default confirm-first btn-sm"><i class="ico-refresh mr5"></i>Toggle Action</a>
-
+                        @elseif($lead->newly_assigned != 1)
+                        <a href="{{ route('add.action', $lead->id) }}" class="btn btn-default confirm-first btn-sm"><i class="ico-refresh mr5"></i>Toggle Action</a>
+                        @endif
                         <a href="{{ route('leads-modify-single', $lead->id) }}" class="btn btn-default btn-sm"><i class="ico-pencil mr5"></i>Edit</a>
                         @if($delete_action)
                             @if($lead->marked_deleted)

@@ -51,7 +51,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="phone">Phone:</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="phone" id="phone" value="{{ $client->Phone }}">
+                                <input type="text" class="form-control input-sm" name="phone" id="phone" value="{{ $client->Phone }}" data-parsley-type="number">
                                 
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="mobile">Mobile (1):</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="mobile" id="mobile" value="{{ $client->mobile }}" >
+                                <input type="text" class="form-control input-sm" name="mobile" id="mobile" value="{{ $client->mobile }}" data-parsley-type="number" data-parsley-minlength="11" data-parsley-maxlength="11">
                             </div>
                         </div>
 
@@ -68,7 +68,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="mobile_two">Mobile (2):</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="mobile_two" id="mobile_two" value="{{ $client->mobile_two }}" >
+                                <input type="text" class="form-control input-sm" name="mobile_two" id="mobile_two" value="{{ $client->mobile_two }}"  data-parsley-type="number" data-parsley-minlength="11" data-parsley-maxlength="11">
                             </div>
                         </div>
 
@@ -76,7 +76,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="international_number">International Number:</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="international_number" id="international_number" value="{{ $client->international_number }}" >
+                                <input type="text" class="form-control input-sm" name="international_number" id="international_number" value="{{ $client->international_number }}" data-parsley-type="number">
                             </div>
                         </div>
 
@@ -100,7 +100,7 @@
 
                            <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label text-right" for="project_id">Projects:</label>
+                                    <label class="col-sm-3 control-label text-right" for="project_id">Projects: <span class="text-danger">*</span></label>
                                     <div class="col-sm-9">
                                         <select name="project_id[]" id="e1" class="form-control input-sm minor" multiple>
                                             @foreach(\App\Models\ParameterProject::where('published',true)->get() as $V)
@@ -260,21 +260,21 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="new_phone">Phone:</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="new_phone" id="new_phone" value="{{ $client->sub()->first() ? $client->sub()->first()->phone : '' }} " >
+                                <input type="text" class="form-control input-sm" name="new_phone" id="new_phone" value="{{ $client->sub()->first() ? $client->sub()->first()->phone : '' }} " data-parsley-type="number">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="new_mobile_one">Mobile (1):</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="new_mobile_one" id="new_mobile_one" value="{{ $client->sub()->first() ? $client->sub()->first()->mobile_one : '' }} " >
+                                <input type="text" class="form-control input-sm" name="new_mobile_one" id="new_mobile_one" value="{{ $client->sub()->first() ? $client->sub()->first()->mobile_one : '' }} " data-parsley-type="number" data-parsley-minlength="11" data-parsley-maxlength="11">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="new_mobie_two">Mobile (2):</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="new_mobie_two" id="new_mobie_two" value="{{ $client->sub()->first() ? $client->sub()->first()->mobile_two : '' }} " >
+                                <input type="text" class="form-control input-sm" name="new_mobie_two" id="new_mobie_two" value="{{ $client->sub()->first() ? $client->sub()->first()->mobile_two : '' }} " data-parsley-type="number" data-parsley-minlength="11" data-parsley-maxlength="11">
                             </div>
                         </div>
                     </div>
@@ -283,7 +283,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="new_international_number">International Number:</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="new_international_number" id="new_international_number" value="{{ $client->sub()->first() ? $client->sub()->first()->international_number : '' }} " >
+                                <input type="text" class="form-control input-sm" name="new_international_number" id="new_international_number" value="{{ $client->sub()->first() ? $client->sub()->first()->international_number : '' }} " data-parsley-type="number">
                             </div>
                         </div>
 

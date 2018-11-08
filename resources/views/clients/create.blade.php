@@ -73,7 +73,7 @@
                         @endif
                             <label class="col-sm-3 control-label" for="phone">Phone:</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="phone" id="phone"{{ (old('phone') ? '  value="'.e(old('phone')).'"' : '') }}>
+                                <input type="text" class="form-control input-sm" name="phone" id="phone"{{ (old('phone') ? '  value="'.e(old('phone')).'"' : '') }} data-parsley-type="number">
                                 @if($errors->has('phone'))
                                 <div class="help-block">{{ $errors->first('phone') }}</div>
                                 @endif
@@ -88,7 +88,7 @@
                         @endif
                             <label class="col-sm-3 control-label" for="mobile">Mobile (1):</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="mobile" id="mobile" value="{{ session('number_type_mobile') ? : '' }}" {{ session('number_type_mobile') ? 'readonly' : '' }}>
+                                <input type="text" class="form-control input-sm" name="mobile" id="mobile" value="{{ session('number_type_mobile') ? : '' }}" {{ session('number_type_mobile') ? 'readonly' : '' }} data-parsley-type="number" data-parsley-minlength="11" data-parsley-maxlength="11">
                                 @if($errors->has('mobile'))
                                 <div class="help-block">{{ $errors->first('mobile') }}</div>
                                 @endif
@@ -105,7 +105,7 @@
                         @endif
                             <label class="col-sm-3 control-label" for="mobile_two">Mobile (2):</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="mobile_two" id="mobile_two" >
+                                <input type="text" class="form-control input-sm" name="mobile_two" id="mobile_two" data-parsley-type="number" data-parsley-minlength="11" data-parsley-maxlength="11">
                                 @if($errors->has('mobile_two'))
                                 <div class="help-block">{{ $errors->first('mobile_two') }}</div>
                                 @endif
@@ -122,7 +122,7 @@
                         @endif
                             <label class="col-sm-3 control-label" for="international_number">International Number:</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="international_number" id="international_number"  value="{{ session('number_type_international_number') ?: '' }}"  {{ session('number_type_international_number') ? 'readonly': '' }}>
+                                <input type="text" class="form-control input-sm" name="international_number" id="international_number"  value="{{ session('number_type_international_number') ?: '' }}"  {{ session('number_type_international_number') ? 'readonly': '' }} data-parsley-type="number" >
                                 @if($errors->has('international_number'))
                                 <div class="help-block">{{ $errors->first('international_number') }}</div>
                                 @endif
@@ -163,7 +163,7 @@
 
                            <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label text-right" for="project_id">Projects:</label>
+                                    <label class="col-sm-3 control-label text-right" for="project_id">Projects: <span class="text-danger">*</span></label>
                                     <div class="col-sm-9">
                                         <select name="project_id[]" id="e1" class="form-control input-sm minor" multiple>
                                             @foreach(\App\Models\ParameterProject::where('published',true)->get() as $V)
@@ -378,7 +378,7 @@
                         @endif
                             <label class="col-sm-3 control-label" for="new_phone">Phone:</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="new_phone" id="new_phone"{{ (old('new_phone') ? '  value="'.e(old('new_phone')).'"' : '') }}>
+                                <input type="text" class="form-control input-sm" name="new_phone" id="new_phone"{{ (old('new_phone') ? '  value="'.e(old('new_phone')).'"' : '') }} data-parsley-type="number" >
                                 @if($errors->has('new_phone'))
                                 <div class="help-block">{{ $errors->first('new_phone') }}</div>
                                 @endif
@@ -391,7 +391,7 @@
                         @endif
                             <label class="col-sm-3 control-label" for="new_mobile_one">Mobile (1):</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="new_mobile_one" id="new_mobile_one"{{ (old('new_mobile_one') ? '  value="'.e(old('new_mobile_one')).'"' : '') }}>
+                                <input type="text" class="form-control input-sm" name="new_mobile_one" id="new_mobile_one"{{ (old('new_mobile_one') ? '  value="'.e(old('new_mobile_one')).'"' : '') }} data-parsley-type="number" data-parsley-minlength="11" data-parsley-maxlength="11">
                                 @if($errors->has('new_mobile_one'))
                                 <div class="help-block">{{ $errors->first('new_mobile_one') }}</div>
                                 @endif
@@ -404,7 +404,7 @@
                         @endif
                             <label class="col-sm-3 control-label" for="new_mobie_two">Mobile (2):</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-sm" name="new_mobie_two" id="new_mobie_two"{{ (old('new_mobie_two') ? '  value="'.e(old('new_mobie_two')).'"' : '') }}>
+                                <input type="text" class="form-control input-sm" name="new_mobie_two" id="new_mobie_two"{{ (old('new_mobie_two') ? '  value="'.e(old('new_mobie_two')).'"' : '') }} data-parsley-type="number" data-parsley-minlength="11" data-parsley-maxlength="11">
                                 @if($errors->has('new_mobie_two'))
                                 <div class="help-block">{{ $errors->first('new_mobie_two') }}</div>
                                 @endif

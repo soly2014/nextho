@@ -35,7 +35,7 @@ class ClientController extends Controller {
 			                                                                     ->where('newly_assigned', false)
 			                                                                     ->latest()->paginate(25);
 			$view_all= true;
-		} else if(auth()->user()->role_id == '2') {
+		} else { //if(auth()->user()->role_id == '2') {
 
 			$leads 		= auth()->user()->clientsAssigned()->with('district')->where('marked_deleted', false)
 			                                                                 ->where('is_customer', false)
@@ -52,25 +52,25 @@ class ClientController extends Controller {
 			                                                                 ->where('converted', true)
 			                                                                 ->where('newly_assigned', false)
 			                                                                 ->latest()->paginate(25);
-		} else {
+		} // else {
 
-			$leads 		= auth()->user()->clientsAssigned()->with('district')->where('marked_deleted', false)
-			                                                                 ->where('is_customer', false)
-			                                                                 ->where('newly_assigned', false)
-			                                                                 ->where('converted', false)
-			                                                                 ->latest()->paginate(25);
-			$no_leads 	= Client::with('userDeleted', 'userAssigned', 'district')->where('marked_deleted', false)
-			                                                                     ->where('is_customer', false)
-			                                                                     ->where('newly_assigned', true)
-			                                                                     ->where('converted', false)
-			                                                                     ->latest()->paginate(25);
-			$converted 	= auth()->user()->clientsAssigned()->with('district')->where('marked_deleted', false)
-			                                                                 ->where('is_customer', false)
-			                                                                 ->where('converted', true)
-			                                                                 ->where('newly_assigned', false)
-			                                                                 ->latest()->paginate(25);
+		// 	$leads 		= auth()->user()->clientsAssigned()->with('district')->where('marked_deleted', false)
+		// 	                                                                 ->where('is_customer', false)
+		// 	                                                                 ->where('newly_assigned', false)
+		// 	                                                                 ->where('converted', false)
+		// 	                                                                 ->latest()->paginate(25);
+		// 	$no_leads 	= Client::with('userDeleted', 'userAssigned', 'district')->where('marked_deleted', false)
+		// 	                                                                     ->where('is_customer', false)
+		// 	                                                                     ->where('newly_assigned', true)
+		// 	                                                                     ->where('converted', false)
+		// 	                                                                     ->latest()->paginate(25);
+		// 	$converted 	= auth()->user()->clientsAssigned()->with('district')->where('marked_deleted', false)
+		// 	                                                                 ->where('is_customer', false)
+		// 	                                                                 ->where('converted', true)
+		// 	                                                                 ->where('newly_assigned', false)
+		// 	                                                                 ->latest()->paginate(25);
 
-		}
+		// }
 
 		PageTitle::add('View Leads');
 		return view('clients.leadsview', array(
@@ -279,7 +279,7 @@ class ClientController extends Controller {
 								 'last_name'             => 'regex:/^[a-zA-Z ]+$/u',
 								 'company'               => 'regex:/^[a-zA-Z ]+$/u',
 								 'work_title'            => 'regex:/^[a-zA-Z ]+$/u',
-								 'phone'                 => 'required_without_all:mobile,mobile_two,international_number',
+								 'phone'                 => 'required_without_all:mobile,mobile_two,international_number|regex:/[0-9]/',
 								 'mobile_two'            => 'required_without_all:mobile,phone,international_number|regex:/(01)[0-9]{9}/',
 								 'international_number'  => 'required_without_all:mobile,mobile_two,phone',
 								 'mobile'                => 'required_without_all:phone,international_number,mobile_two|regex:/(01)[0-9]{9}/',
@@ -303,7 +303,6 @@ class ClientController extends Controller {
 							 ), $messages
 						);
         // 
-
 				if (
 			    	    in_array($request->phone , $this->getPhones()) || 
 			    	    in_array($request->mobile , $this->getPhones()) || 

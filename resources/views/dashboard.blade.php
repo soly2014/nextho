@@ -5,12 +5,12 @@
 <ol class="breadcrumb breadcrumb-transparent nm">
 
     @if(auth()->user()->role_id == '2')
-    <li class="active" style="position: relative;"><i class="fa fa-envelope" style="font-size: 30px;color:#005da4;"></i><span class="badge" style="position: absolute;right: 0;bottom: 0;background-color: red;">
+    <li class="active" style="position: relative;"><i class="fa fa-envelope" style="font-size: 30px;color:#005da4;"></i><span class="badge"  id="countBadge" style="position: absolute;right: 0;bottom: 0;background-color: red;">
     {{ $new_leads }}</span></li>
     @endif
 
     @if(auth()->user()->role_id == '3')
-    <li class="active" style="position: relative;padding: 5px;"><i class="fa fa-thumbs-o-down" style="font-size: 30px;color:#005da4;"></i><span id="countBadge" class="badge" style="position: absolute;left: 0;bottom: 0;background-color: red;">
+    <li class="active" style="position: relative;padding: 5px;"><i class="fa fa-thumbs-o-down" style="font-size: 30px;color:#005da4;"></i><span class="badge" style="position: absolute;left: 0;bottom: 0;background-color: red;">
     {{ \App\Models\Client::where('newly_assigned',1)->count() }}</span></li>
     @endif
 
@@ -108,6 +108,7 @@
 
 <script type="text/javascript" src="{{ asset('public/plugins/jqueryui/js/jquery-ui.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('public/plugins/jqueryui/js/jquery-ui-timepicker.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('public/javascript/sound.js') }}"></script>
 
 <script type="text/javascript">
     
@@ -466,7 +467,7 @@
         })(jQuery);
 
 
-        @if(auth()->user()->role_id == '2')
+        @if(auth()->user()->role_id == '2') 
         setInterval(function() {
             $.ajax({
                 type:'GET',
@@ -474,12 +475,10 @@
                 url:'{{ route('count_new_leads') }}',
                 success:function(data){
                     if (data.success) {
-                         $('#countBadge').val(data.new_count);
-                         $.playSound("http://www.noiseaddicts.com/samples_1w72b820/3724.mp3");
-                    } else {
-
+                         $('#countBadge').html(data.new_count);
+                            var buzz = $buzz("{{ asset('public/tracks/3724.mp3') }}");
+                            buzz.play();
                     }
-                    console.log(data);
                 },
                 error:function(error){
                     //alert(error);
