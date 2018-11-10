@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+    Route::get('damn', function(){
+        return "damn";
+    });
 
 
 Event::listen('illuminate.query', function($sql, $bindings){

@@ -21,7 +21,7 @@
         <!--/ panel heading/header -->
         
         <div class="table-responsive panel-collapse pull out text-center wrapper">
-            <table class="table table-bordered table-hover responsive text-center" id="Leads_Table">
+            <table class="table table-bordered table-hover responsive text-center">
                 <thead> 
                     <tr class="text-center">
                         <th  class="text-center">ID</th>
@@ -63,7 +63,7 @@
                             <td>{{ $resale->down_payment }}</td>
                             <td>{{ $resale->transfer_fees }}</td>
                             <td>{{ $resale->buyer_commission }}</td>
-                            <td>{{ $resale->land_area }}</td>
+                            <td>{{ $resale->down_payment + $resale->transfer_fees + $resale->buyer_commission}}</td> 
                             <td>{{ camel_case($resale->unit_now) }}</td>
                             <td>{{ camel_case($resale->installment) }}</td>
                             <td data-toggle="tooltip" title="{{ camel_case($resale->notes) }}">{{ str_limit($resale->notes,10) }}</td>
@@ -84,6 +84,7 @@
         </div>
     </div>
 
+            {{ $resales->links() }}
 </div>
 
 @stop
@@ -125,6 +126,7 @@ $(document).ready(function(){
          placeholder: "Select a State",
          allowClear: true
     });
+    $('.full-date-picker').datepicker({ dateFormat: 'dd-mm-yy' });
 
 </script>
 

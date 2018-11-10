@@ -244,7 +244,6 @@
 <script type="text/javascript" src="{{ asset('public/javascript/forms/singleview.js') }} "></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
 <script type="text/javascript">
-	
     $("#e2,#e1").select2({
          placeholder: "Select a State",
          allowClear: true

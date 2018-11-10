@@ -181,7 +181,9 @@
         <script type="text/javascript" src="{{ asset('public/javascript/app.min.js') }}"></script>
 
         @yield('scripts')
-
+        <script type="text/javascript">
+            $('.full-date-picker').datepicker({ dateFormat: 'dd-mm-yy' });
+        </script>
         <!--/ App and page level script -->
         <!--/ END JAVASCRIPT SECTION -->
     </body>

@@ -16,9 +16,9 @@ class ResaleController extends Controller
     public function index()
     {
         if (auth()->user()->role_id == '1') {
-           $resales = \App\Models\Resale::all();
+           $resales = \App\Models\Resale::latest()->paginate(8);
         } else {
-           $resales = \App\Models\Resale::where('approved',true)->get();   
+           $resales = \App\Models\Resale::where('approved',true)->latest()->paginate(8);   
         }
         
         return view('resale.index',compact('resales'));
@@ -26,7 +26,7 @@ class ResaleController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
+     *`
      * @return \Illuminate\Http\Response
      */
     public function create()
